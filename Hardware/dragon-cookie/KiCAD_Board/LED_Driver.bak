@@ -1,0 +1,315 @@
+EESchema Schematic File Version 4
+LIBS:KiCAD_Board-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 2 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 601F5771
+P 5700 3225
+AR Path="/601F5771" Ref="Q?"  Part="1" 
+AR Path="/601F37C7/601F5771" Ref="Q201"  Part="1" 
+F 0 "Q201" V 5625 3150 50  0000 C CNN
+F 1 "DMN3404L-7" V 6000 1550 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5900 3325 50  0001 C CNN
+F 3 "~" H 5700 3225 50  0001 C CNN
+	1    5700 3225
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 601F5778
+P 5250 3325
+AR Path="/601F5778" Ref="Q?"  Part="1" 
+AR Path="/601F37C7/601F5778" Ref="Q202"  Part="1" 
+F 0 "Q202" V 5150 3250 50  0000 C CNN
+F 1 "DMN3404L-7" V 5591 3325 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5450 3425 50  0001 C CNN
+F 3 "~" H 5250 3325 50  0001 C CNN
+	1    5250 3325
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 601F577F
+P 4800 3425
+AR Path="/601F577F" Ref="Q?"  Part="1" 
+AR Path="/601F37C7/601F577F" Ref="Q203"  Part="1" 
+F 0 "Q203" V 4700 3350 50  0000 C CNN
+F 1 "DMN3404L-7" V 5141 3425 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5000 3525 50  0001 C CNN
+F 3 "~" H 4800 3425 50  0001 C CNN
+	1    4800 3425
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:Q_NMOS_GSD Q?
+U 1 1 601F5786
+P 4375 3525
+AR Path="/601F5786" Ref="Q?"  Part="1" 
+AR Path="/601F37C7/601F5786" Ref="Q204"  Part="1" 
+F 0 "Q204" V 4250 3425 50  0000 C CNN
+F 1 "DMN3404L-7" V 4716 3525 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 4575 3625 50  0001 C CNN
+F 3 "~" H 4375 3525 50  0001 C CNN
+	1    4375 3525
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5900 3325 5950 3325
+Wire Wire Line
+	5450 3425 5525 3425
+Wire Wire Line
+	5000 3525 5075 3525
+$Comp
+L power:GND #PWR?
+U 1 1 601F5790
+P 4175 3625
+AR Path="/601F5790" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F5790" Ref="#PWR0103"  Part="1" 
+F 0 "#PWR0103" H 4175 3375 50  0001 C CNN
+F 1 "GND" V 4180 3497 50  0001 R CNN
+F 2 "" H 4175 3625 50  0001 C CNN
+F 3 "" H 4175 3625 50  0001 C CNN
+	1    4175 3625
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601F5796
+P 4600 3525
+AR Path="/601F5796" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F5796" Ref="#PWR0104"  Part="1" 
+F 0 "#PWR0104" H 4600 3275 50  0001 C CNN
+F 1 "GND" V 4605 3397 50  0001 R CNN
+F 2 "" H 4600 3525 50  0001 C CNN
+F 3 "" H 4600 3525 50  0001 C CNN
+	1    4600 3525
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601F579C
+P 5050 3425
+AR Path="/601F579C" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F579C" Ref="#PWR0105"  Part="1" 
+F 0 "#PWR0105" H 5050 3175 50  0001 C CNN
+F 1 "GND" V 5055 3297 50  0001 R CNN
+F 2 "" H 5050 3425 50  0001 C CNN
+F 3 "" H 5050 3425 50  0001 C CNN
+	1    5050 3425
+	0    1    1    0   
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601F57A2
+P 5500 3325
+AR Path="/601F57A2" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F57A2" Ref="#PWR0106"  Part="1" 
+F 0 "#PWR0106" H 5500 3075 50  0001 C CNN
+F 1 "GND" V 5505 3197 50  0001 R CNN
+F 2 "" H 5500 3325 50  0001 C CNN
+F 3 "" H 5500 3325 50  0001 C CNN
+	1    5500 3325
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+VDC #PWR?
+U 1 1 601F57A8
+P 6175 3225
+AR Path="/601F57A8" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F57A8" Ref="#PWR0107"  Part="1" 
+F 0 "#PWR0107" H 6175 3125 50  0001 C CNN
+F 1 "+VDC" V 6300 3225 50  0000 L CNN
+F 2 "" H 6175 3225 50  0001 C CNN
+F 3 "" H 6175 3225 50  0001 C CNN
+	1    6175 3225
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:D D?
+U 1 1 601F57AE
+P 5950 3850
+AR Path="/601F57AE" Ref="D?"  Part="1" 
+AR Path="/601F37C7/601F57AE" Ref="D204"  Part="1" 
+F 0 "D204" V 5996 3770 50  0000 R CNN
+F 1 "LL4148-GS08" V 5905 3770 50  0000 R CNN
+F 2 "Diode_SMD:D_MiniMELF" H 5950 3850 50  0001 C CNN
+F 3 "~" H 5950 3850 50  0001 C CNN
+	1    5950 3850
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	5950 3700 5950 3325
+Connection ~ 5950 3325
+Wire Wire Line
+	5525 3700 5525 3425
+Connection ~ 5525 3425
+Wire Wire Line
+	5075 3700 5075 3525
+Connection ~ 5075 3525
+Wire Wire Line
+	4625 3700 4625 3625
+Connection ~ 4625 3625
+Wire Wire Line
+	4625 3625 4575 3625
+$Comp
+L power:+VDC #PWR?
+U 1 1 601F57BE
+P 5950 4000
+AR Path="/601F57BE" Ref="#PWR?"  Part="1" 
+AR Path="/601F37C7/601F57BE" Ref="#PWR0108"  Part="1" 
+F 0 "#PWR0108" H 5950 3900 50  0001 C CNN
+F 1 "+VDC" V 6075 4000 50  0000 L CNN
+F 2 "" H 5950 4000 50  0001 C CNN
+F 3 "" H 5950 4000 50  0001 C CNN
+	1    5950 4000
+	-1   0    0    1   
+$EndComp
+Connection ~ 5950 4000
+Wire Wire Line
+	4625 4000 5075 4000
+$Comp
+L Device:D D?
+U 1 1 601F57C6
+P 5525 3850
+AR Path="/601F57C6" Ref="D?"  Part="1" 
+AR Path="/601F37C7/601F57C6" Ref="D203"  Part="1" 
+F 0 "D203" V 5525 3770 50  0000 R CNN
+F 1 "LL4148-GS08" V 5480 3770 50  0001 R CNN
+F 2 "Diode_SMD:D_MiniMELF" H 5525 3850 50  0001 C CNN
+F 3 "~" H 5525 3850 50  0001 C CNN
+	1    5525 3850
+	0    -1   -1   0   
+$EndComp
+Connection ~ 5525 4000
+Wire Wire Line
+	5525 4000 5950 4000
+$Comp
+L Device:D D?
+U 1 1 601F57CF
+P 5075 3850
+AR Path="/601F57CF" Ref="D?"  Part="1" 
+AR Path="/601F37C7/601F57CF" Ref="D202"  Part="1" 
+F 0 "D202" V 5075 3770 50  0000 R CNN
+F 1 "LL4148-GS08" V 5030 3770 50  0001 R CNN
+F 2 "Diode_SMD:D_MiniMELF" H 5075 3850 50  0001 C CNN
+F 3 "~" H 5075 3850 50  0001 C CNN
+	1    5075 3850
+	0    -1   -1   0   
+$EndComp
+Connection ~ 5075 4000
+Wire Wire Line
+	5075 4000 5525 4000
+$Comp
+L Device:D D?
+U 1 1 601F57D8
+P 4625 3850
+AR Path="/601F57D8" Ref="D?"  Part="1" 
+AR Path="/601F37C7/601F57D8" Ref="D201"  Part="1" 
+F 0 "D201" V 4625 3770 50  0000 R CNN
+F 1 "LL4148-GS08" V 4580 3770 50  0001 R CNN
+F 2 "Diode_SMD:D_MiniMELF" H 4625 3850 50  0001 C CNN
+F 3 "~" H 4625 3850 50  0001 C CNN
+	1    4625 3850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x05 J?
+U 1 1 601F57DF
+P 6825 3425
+AR Path="/601F57DF" Ref="J?"  Part="1" 
+AR Path="/601F37C7/601F57DF" Ref="J202"  Part="1" 
+F 0 "J202" H 6905 3467 50  0000 L CNN
+F 1 "Conn_01x05" H 6905 3376 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 6825 3425 50  0001 C CNN
+F 3 "~" H 6825 3425 50  0001 C CNN
+	1    6825 3425
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_01x05 J?
+U 1 1 601F57E6
+P 6825 2875
+AR Path="/601F57E6" Ref="J?"  Part="1" 
+AR Path="/601F37C7/601F57E6" Ref="J201"  Part="1" 
+F 0 "J201" H 6905 2917 50  0000 L CNN
+F 1 "Conn_01x05" H 6905 2826 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Horizontal" H 6825 2875 50  0001 C CNN
+F 3 "~" H 6825 2875 50  0001 C CNN
+	1    6825 2875
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6625 3075 6575 3075
+Wire Wire Line
+	6575 3075 6575 3625
+Wire Wire Line
+	6575 3625 6625 3625
+Wire Wire Line
+	4625 3625 6575 3625
+Connection ~ 6575 3625
+Wire Wire Line
+	5075 3525 6525 3525
+Wire Wire Line
+	5525 3425 6475 3425
+Wire Wire Line
+	5950 3325 6425 3325
+Wire Wire Line
+	6175 3225 6375 3225
+Wire Wire Line
+	6625 2975 6525 2975
+Wire Wire Line
+	6525 2975 6525 3525
+Connection ~ 6525 3525
+Wire Wire Line
+	6525 3525 6625 3525
+Wire Wire Line
+	6475 3425 6475 2875
+Wire Wire Line
+	6475 2875 6625 2875
+Connection ~ 6475 3425
+Wire Wire Line
+	6475 3425 6625 3425
+Wire Wire Line
+	6625 2775 6425 2775
+Wire Wire Line
+	6425 2775 6425 3325
+Connection ~ 6425 3325
+Wire Wire Line
+	6425 3325 6625 3325
+Wire Wire Line
+	6375 2675 6375 3225
+Wire Wire Line
+	6375 2675 6625 2675
+Connection ~ 6375 3225
+Wire Wire Line
+	6375 3225 6625 3225
+Wire Wire Line
+	5700 3025 5700 2600
+Wire Wire Line
+	5250 2600 5250 3125
+Wire Wire Line
+	4800 2600 4800 3225
+Wire Wire Line
+	4375 2600 4375 3325
+Text GLabel 5700 2600 1    50   Input ~ 0
+PWM_R
+Text GLabel 5250 2600 1    50   Input ~ 0
+PWM_G
+Text GLabel 4800 2600 1    50   Input ~ 0
+PWM_B
+Text GLabel 4375 2600 1    50   Input ~ 0
+PWM_WW
+$EndSCHEMATC

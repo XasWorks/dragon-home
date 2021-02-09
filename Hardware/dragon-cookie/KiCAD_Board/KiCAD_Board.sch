@@ -1,0 +1,511 @@
+EESchema Schematic File Version 4
+LIBS:KiCAD_Board-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L dk_RF-Transceiver-Modules:ESP32-WROOM-32 MOD101
+U 1 1 6017D5F4
+P 5400 1625
+F 0 "MOD101" H 5850 1800 60  0000 C CNN
+F 1 "ESP32-WROOM-32" H 6175 1700 60  0000 C CNN
+F 2 "digikey-footprints:ESP32-WROOM-32D" H 5600 1825 60  0001 L CNN
+F 3 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" H 5600 1925 60  0001 L CNN
+F 4 "1904-1010-1-ND" H 5600 2025 60  0001 L CNN "Digi-Key_PN"
+F 5 "ESP32-WROOM-32" H 5600 2125 60  0001 L CNN "MPN"
+F 6 "RF/IF and RFID" H 5600 2225 60  0001 L CNN "Category"
+F 7 "RF Transceiver Modules" H 5600 2325 60  0001 L CNN "Family"
+F 8 "https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf" H 5600 2425 60  0001 L CNN "DK_Datasheet_Link"
+F 9 "/product-detail/en/espressif-systems/ESP32-WROOM-32/1904-1010-1-ND/8544305" H 5600 2525 60  0001 L CNN "DK_Detail_Page"
+F 10 "SMD MODULE, ESP32-D0WDQ6, 32MBIT" H 5600 2625 60  0001 L CNN "Description"
+F 11 "Espressif Systems" H 5600 2725 60  0001 L CNN "Manufacturer"
+F 12 "Active" H 5600 2825 60  0001 L CNN "Status"
+	1    5400 1625
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector_Generic:Conn_02x03_Odd_Even J101
+U 1 1 6017DB11
+P 1375 1125
+F 0 "J101" H 1425 1442 50  0000 C CNN
+F 1 "Conn_02x03_Odd_Even" H 1425 1351 50  0000 C CNN
+F 2 "Connector_PinHeader_1.27mm:PinHeader_2x03_P1.27mm_Vertical_SMD" H 1375 1125 50  0001 C CNN
+F 3 "~" H 1375 1125 50  0001 C CNN
+	1    1375 1125
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D101
+U 1 1 60181660
+P 1575 7025
+F 0 "D101" H 1700 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 1700 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 1625 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 1675 6650 50  0001 L TNN
+	1    1575 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D102
+U 1 1 601827F0
+P 2250 7025
+F 0 "D102" H 2375 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 2375 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 2300 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 2350 6650 50  0001 L TNN
+	1    2250 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D103
+U 1 1 6018286C
+P 2925 7025
+F 0 "D103" H 3050 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 3050 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 2975 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 3025 6650 50  0001 L TNN
+	1    2925 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D104
+U 1 1 60182900
+P 3600 7025
+F 0 "D104" H 3725 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 3725 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 3650 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 3700 6650 50  0001 L TNN
+	1    3600 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D105
+U 1 1 60182C64
+P 4275 7025
+F 0 "D105" H 4400 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 4400 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 4325 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 4375 6650 50  0001 L TNN
+	1    4275 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L LED:WS2812B D106
+U 1 1 60182D31
+P 4950 7025
+F 0 "D106" H 5075 6725 50  0000 L CNN
+F 1 "IN-PI42TAS" H 5075 6650 50  0000 L CNN
+F 2 "XasPrints:IN-PI42TAS" H 5000 6725 50  0001 L TNN
+F 3 "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf" H 5050 6650 50  0001 L TNN
+	1    4950 7025
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR0101
+U 1 1 601A7C6E
+P 5600 1450
+F 0 "#PWR0101" H 5600 1300 50  0001 C CNN
+F 1 "+3.3V" H 5615 1623 50  0000 C CNN
+F 2 "" H 5600 1450 50  0001 C CNN
+F 3 "" H 5600 1450 50  0001 C CNN
+	1    5600 1450
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5600 1450 5600 1475
+$Comp
+L Device:C_Small C102
+U 1 1 601A8707
+P 4975 1325
+F 0 "C102" V 4746 1325 50  0000 C CNN
+F 1 "C_Small" V 4837 1325 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 4975 1325 50  0001 C CNN
+F 3 "~" H 4975 1325 50  0001 C CNN
+	1    4975 1325
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C101
+U 1 1 601A87E9
+P 4975 1125
+F 0 "C101" V 4723 1125 50  0000 C CNN
+F 1 "C" V 4814 1125 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 5013 975 50  0001 C CNN
+F 3 "~" H 4975 1125 50  0001 C CNN
+	1    4975 1125
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5125 1125 5200 1125
+Wire Wire Line
+	5200 1125 5200 1325
+Wire Wire Line
+	5200 1475 5600 1475
+Connection ~ 5600 1475
+Wire Wire Line
+	5600 1475 5600 1525
+Wire Wire Line
+	5075 1325 5200 1325
+Connection ~ 5200 1325
+Wire Wire Line
+	5200 1325 5200 1475
+Wire Wire Line
+	5400 3725 5500 3725
+Wire Wire Line
+	5500 3725 5550 3725
+Connection ~ 5500 3725
+Wire Wire Line
+	5600 3725 5700 3725
+Connection ~ 5600 3725
+$Comp
+L power:GND #PWR0102
+U 1 1 601B53F7
+P 5550 3825
+F 0 "#PWR0102" H 5550 3575 50  0001 C CNN
+F 1 "GND" H 5555 3652 50  0000 C CNN
+F 2 "" H 5550 3825 50  0001 C CNN
+F 3 "" H 5550 3825 50  0001 C CNN
+	1    5550 3825
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5550 3825 5550 3725
+Connection ~ 5550 3725
+Wire Wire Line
+	5550 3725 5600 3725
+$Comp
+L Device:R_Small R101
+U 1 1 601B9113
+P 4600 1600
+F 0 "R101" H 4659 1646 50  0000 L CNN
+F 1 "R_Small" H 4659 1555 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 4600 1600 50  0001 C CNN
+F 3 "~" H 4600 1600 50  0001 C CNN
+	1    4600 1600
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4900 1725 4600 1725
+Wire Wire Line
+	4600 1725 4600 1700
+$Comp
+L Device:C_Small C103
+U 1 1 601BAFFF
+P 4375 1625
+F 0 "C103" H 4283 1579 50  0000 R CNN
+F 1 "C_Small" H 4283 1670 50  0000 R CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 4375 1625 50  0001 C CNN
+F 3 "~" H 4375 1625 50  0001 C CNN
+	1    4375 1625
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	4600 1725 4375 1725
+Connection ~ 4600 1725
+Wire Wire Line
+	4900 1825 4025 1825
+Text Label 4025 1825 0    50   ~ 0
+BOOT
+Text Label 4025 1725 0    50   ~ 0
+RESET
+Wire Wire Line
+	4025 1725 4375 1725
+Connection ~ 4375 1725
+Wire Wire Line
+	4900 2225 4025 2225
+Wire Wire Line
+	4025 2425 4900 2425
+Wire Wire Line
+	4900 1925 4025 1925
+Wire Wire Line
+	4025 2025 4900 2025
+Wire Wire Line
+	4900 2625 4025 2625
+Wire Wire Line
+	4900 2725 4025 2725
+$Sheet
+S 8025 925  1950 750 
+U 601F37C7
+F0 "LED Driving" 50
+F1 "LED_Driver.sch" 50
+$EndSheet
+$Sheet
+S 8025 2750 1450 900 
+U 601F78D4
+F0 "Peripheral sensors & coms" 50
+F1 "Peripherals.sch" 50
+$EndSheet
+$Sheet
+S 8025 4125 1450 900 
+U 601FA14E
+F0 "Audio" 50
+F1 "Audio.sch" 50
+$EndSheet
+$Sheet
+S 1150 3825 1450 850 
+U 601FC125
+F0 "Power" 50
+F1 "Power.sch" 50
+$EndSheet
+Wire Wire Line
+	4375 1525 4375 1400
+Wire Wire Line
+	4600 1400 4600 1500
+Wire Wire Line
+	4875 1325 4825 1325
+Wire Wire Line
+	4825 1325 4825 1125
+$Comp
+L power:GND #PWR0123
+U 1 1 6019EAF6
+P 4825 1325
+F 0 "#PWR0123" H 4825 1075 50  0001 C CNN
+F 1 "GND" H 4830 1152 50  0000 C CNN
+F 2 "" H 4825 1325 50  0001 C CNN
+F 3 "" H 4825 1325 50  0001 C CNN
+	1    4825 1325
+	1    0    0    -1  
+$EndComp
+Connection ~ 4825 1325
+$Comp
+L power:GND #PWR0122
+U 1 1 6019FC83
+P 4375 1400
+F 0 "#PWR0122" H 4375 1150 50  0001 C CNN
+F 1 "GND" H 4380 1227 50  0000 C CNN
+F 2 "" H 4375 1400 50  0001 C CNN
+F 3 "" H 4375 1400 50  0001 C CNN
+	1    4375 1400
+	-1   0    0    1   
+$EndComp
+$Comp
+L power:+3.3V #PWR0124
+U 1 1 6019FD31
+P 4600 1400
+F 0 "#PWR0124" H 4600 1250 50  0001 C CNN
+F 1 "+3.3V" H 4615 1573 50  0000 C CNN
+F 2 "" H 4600 1400 50  0001 C CNN
+F 3 "" H 4600 1400 50  0001 C CNN
+	1    4600 1400
+	1    0    0    -1  
+$EndComp
+Text GLabel 4025 1925 0    50   Input ~ 0
+I2C_SDA
+Text GLabel 4025 2025 0    50   Input ~ 0
+I2C_SCL
+Text GLabel 4025 2225 0    50   Input ~ 0
+PWM_WW
+Text GLabel 4025 2425 0    50   Input ~ 0
+PWM_B
+Text GLabel 4025 3525 0    50   Input ~ 0
+PWM_G
+Text GLabel 4025 3425 0    50   Input ~ 0
+PWM_R
+Text GLabel 4025 3225 0    50   Input ~ 0
+WS2812_OUT
+Text GLabel 3250 1550 0    50   Input ~ 0
+IR>E
+Text GLabel 3250 1675 0    50   Input ~ 0
+E>IR
+Wire Wire Line
+	4025 3525 4900 3525
+Wire Wire Line
+	4025 3425 4900 3425
+NoConn ~ 6300 1725
+NoConn ~ 6300 1825
+NoConn ~ 6300 1925
+NoConn ~ 6300 2025
+NoConn ~ 6300 2125
+NoConn ~ 6300 2225
+NoConn ~ 6300 2325
+NoConn ~ 6300 2425
+Wire Wire Line
+	4025 3225 4900 3225
+Text GLabel 6525 2525 2    50   Input ~ 0
+E>PROG
+Text GLabel 6525 2625 2    50   Input ~ 0
+PROG>E
+Wire Wire Line
+	6525 2625 6300 2625
+Wire Wire Line
+	6300 2525 6525 2525
+Wire Wire Line
+	4900 3025 4025 3025
+Text GLabel 4025 3025 0    50   Input ~ 0
+AUDIO_TX_LR
+Wire Wire Line
+	4900 3325 4025 3325
+Text GLabel 4025 2925 0    50   Input ~ 0
+AUDIO_TX_BCK
+Wire Wire Line
+	4900 2925 4025 2925
+Text GLabel 4025 2825 0    50   Input ~ 0
+AUDIO_TX_DATA
+Wire Wire Line
+	4025 2825 4900 2825
+Wire Wire Line
+	4900 2125 4025 2125
+Text GLabel 4025 2125 0    50   Input ~ 0
+AUDIO_RX_LR
+Text GLabel 4025 2725 0    50   Input ~ 0
+AUDIO_RX_DATA
+Text GLabel 4025 2625 0    50   Input ~ 0
+AUDIO_RX_BCK
+Wire Wire Line
+	1875 7025 1950 7025
+Wire Wire Line
+	2550 7025 2625 7025
+Wire Wire Line
+	3225 7025 3300 7025
+Wire Wire Line
+	3900 7025 3975 7025
+Wire Wire Line
+	4575 7025 4650 7025
+$Comp
+L power:GND #PWR?
+U 1 1 601D55E3
+P 1575 7325
+F 0 "#PWR?" H 1575 7075 50  0001 C CNN
+F 1 "GND" H 1580 7152 50  0000 C CNN
+F 2 "" H 1575 7325 50  0001 C CNN
+F 3 "" H 1575 7325 50  0001 C CNN
+	1    1575 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601D5631
+P 2250 7325
+F 0 "#PWR?" H 2250 7075 50  0001 C CNN
+F 1 "GND" H 2255 7152 50  0000 C CNN
+F 2 "" H 2250 7325 50  0001 C CNN
+F 3 "" H 2250 7325 50  0001 C CNN
+	1    2250 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601D5654
+P 2925 7325
+F 0 "#PWR?" H 2925 7075 50  0001 C CNN
+F 1 "GND" H 2930 7152 50  0000 C CNN
+F 2 "" H 2925 7325 50  0001 C CNN
+F 3 "" H 2925 7325 50  0001 C CNN
+	1    2925 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601D5677
+P 3600 7325
+F 0 "#PWR?" H 3600 7075 50  0001 C CNN
+F 1 "GND" H 3605 7152 50  0000 C CNN
+F 2 "" H 3600 7325 50  0001 C CNN
+F 3 "" H 3600 7325 50  0001 C CNN
+	1    3600 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601D586E
+P 4275 7325
+F 0 "#PWR?" H 4275 7075 50  0001 C CNN
+F 1 "GND" H 4280 7152 50  0000 C CNN
+F 2 "" H 4275 7325 50  0001 C CNN
+F 3 "" H 4275 7325 50  0001 C CNN
+	1    4275 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601D5B55
+P 4950 7325
+F 0 "#PWR?" H 4950 7075 50  0001 C CNN
+F 1 "GND" H 4955 7152 50  0000 C CNN
+F 2 "" H 4950 7325 50  0001 C CNN
+F 3 "" H 4950 7325 50  0001 C CNN
+	1    4950 7325
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D61D9
+P 1575 6725
+F 0 "#PWR?" H 1575 6575 50  0001 C CNN
+F 1 "+3.3V" H 1590 6898 50  0000 C CNN
+F 2 "" H 1575 6725 50  0001 C CNN
+F 3 "" H 1575 6725 50  0001 C CNN
+	1    1575 6725
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D63A7
+P 2250 6725
+F 0 "#PWR?" H 2250 6575 50  0001 C CNN
+F 1 "+3.3V" H 2265 6898 50  0000 C CNN
+F 2 "" H 2250 6725 50  0001 C CNN
+F 3 "" H 2250 6725 50  0001 C CNN
+	1    2250 6725
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D63CA
+P 2925 6725
+F 0 "#PWR?" H 2925 6575 50  0001 C CNN
+F 1 "+3.3V" H 2940 6898 50  0000 C CNN
+F 2 "" H 2925 6725 50  0001 C CNN
+F 3 "" H 2925 6725 50  0001 C CNN
+	1    2925 6725
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D6705
+P 3600 6725
+F 0 "#PWR?" H 3600 6575 50  0001 C CNN
+F 1 "+3.3V" H 3615 6898 50  0000 C CNN
+F 2 "" H 3600 6725 50  0001 C CNN
+F 3 "" H 3600 6725 50  0001 C CNN
+	1    3600 6725
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D6728
+P 4275 6725
+F 0 "#PWR?" H 4275 6575 50  0001 C CNN
+F 1 "+3.3V" H 4290 6898 50  0000 C CNN
+F 2 "" H 4275 6725 50  0001 C CNN
+F 3 "" H 4275 6725 50  0001 C CNN
+	1    4275 6725
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601D69F7
+P 4950 6725
+F 0 "#PWR?" H 4950 6575 50  0001 C CNN
+F 1 "+3.3V" H 4965 6898 50  0000 C CNN
+F 2 "" H 4950 6725 50  0001 C CNN
+F 3 "" H 4950 6725 50  0001 C CNN
+	1    4950 6725
+	1    0    0    -1  
+$EndComp
+Text GLabel 1225 7025 0    50   Input ~ 0
+WS2812_OUT
+Wire Wire Line
+	1225 7025 1275 7025
+$EndSCHEMATC

@@ -1,0 +1,273 @@
+EESchema Schematic File Version 4
+LIBS:KiCAD_Board-cache
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 4 5
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L XasParts:MAX98357A AMP?
+U 1 1 601FB388
+P 3150 3550
+AR Path="/601FB388" Ref="AMP?"  Part="1" 
+AR Path="/601FA14E/601FB388" Ref="AMP401"  Part="1" 
+F 0 "AMP401" H 3525 3625 50  0000 L CNN
+F 1 "MAX98357A" H 3525 3550 50  0000 L CNN
+F 2 "Package_DFN_QFN:QFN-16-1EP_3x3mm_P0.5mm_EP1.9x1.9mm_ThermalVias" H 3250 3200 50  0001 C CNN
+F 3 "" H 3250 3200 50  0001 C CNN
+	1    3150 3550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:Conn_01x02_Female J?
+U 1 1 601FB38F
+P 4050 3100
+AR Path="/601FB38F" Ref="J?"  Part="1" 
+AR Path="/601FA14E/601FB38F" Ref="J401"  Part="1" 
+F 0 "J401" H 4077 3076 50  0000 L CNN
+F 1 "Conn_01x02_Female" H 4077 2985 50  0000 L CNN
+F 2 "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical" H 4050 3100 50  0001 C CNN
+F 3 "~" H 4050 3100 50  0001 C CNN
+	1    4050 3100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3700 3100 3850 3100
+Wire Wire Line
+	3700 3200 3850 3200
+Wire Wire Line
+	3150 3900 3250 3900
+Wire Wire Line
+	3250 3900 3300 3900
+Connection ~ 3250 3900
+Wire Wire Line
+	3350 3900 3450 3900
+Connection ~ 3350 3900
+$Comp
+L power:GND #PWR?
+U 1 1 601FB39D
+P 3300 3975
+AR Path="/601FB39D" Ref="#PWR?"  Part="1" 
+AR Path="/601FA14E/601FB39D" Ref="#PWR0111"  Part="1" 
+F 0 "#PWR0111" H 3300 3725 50  0001 C CNN
+F 1 "GND" H 3305 3802 50  0000 C CNN
+F 2 "" H 3300 3975 50  0001 C CNN
+F 3 "" H 3300 3975 50  0001 C CNN
+	1    3300 3975
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3300 3975 3300 3900
+Connection ~ 3300 3900
+Wire Wire Line
+	3300 3900 3350 3900
+Wire Wire Line
+	3100 2500 3150 2500
+$Comp
+L Device:C_Small C?
+U 1 1 601FB3A7
+P 2600 2525
+AR Path="/601FB3A7" Ref="C?"  Part="1" 
+AR Path="/601FA14E/601FB3A7" Ref="C401"  Part="1" 
+F 0 "C401" H 2692 2571 50  0000 L CNN
+F 1 "C_Small" H 2692 2480 50  0000 L CNN
+F 2 "" H 2600 2525 50  0001 C CNN
+F 3 "~" H 2600 2525 50  0001 C CNN
+	1    2600 2525
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 601FB3AE
+P 2600 2675
+AR Path="/601FB3AE" Ref="#PWR?"  Part="1" 
+AR Path="/601FA14E/601FB3AE" Ref="#PWR0112"  Part="1" 
+F 0 "#PWR0112" H 2600 2425 50  0001 C CNN
+F 1 "GND" H 2605 2502 50  0000 C CNN
+F 2 "" H 2600 2675 50  0001 C CNN
+F 3 "" H 2600 2675 50  0001 C CNN
+	1    2600 2675
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2600 2675 2600 2625
+Wire Wire Line
+	2600 2425 3150 2425
+Wire Wire Line
+	3150 2425 3150 2500
+Connection ~ 3150 2500
+Wire Wire Line
+	3150 2500 3200 2500
+$Comp
+L power:+3.3V #PWR?
+U 1 1 601FB3B9
+P 3150 2325
+AR Path="/601FB3B9" Ref="#PWR?"  Part="1" 
+AR Path="/601FA14E/601FB3B9" Ref="#PWR0113"  Part="1" 
+F 0 "#PWR0113" H 3150 2175 50  0001 C CNN
+F 1 "+3.3V" H 3165 2498 50  0000 C CNN
+F 2 "" H 3150 2325 50  0001 C CNN
+F 3 "" H 3150 2325 50  0001 C CNN
+	1    3150 2325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3150 2325 3150 2425
+Connection ~ 3150 2425
+$Comp
+L XasParts:CMM-4030 U?
+U 1 1 601FB3C2
+P 6150 3400
+AR Path="/601FB3C2" Ref="U?"  Part="1" 
+AR Path="/601FA14E/601FB3C2" Ref="U401"  Part="1" 
+F 0 "U401" H 6450 3200 50  0000 C CNN
+F 1 "CMM-4030" H 6550 3125 50  0000 C CNN
+F 2 "XasPrints:CMM-4030" H 6050 3100 50  0001 C CNN
+F 3 "https://www.digikey.de/product-detail/de/cui-devices/CMM-4030D-261-I2S-TR/2223-CMM-4030D-261-I2S-CT-ND/13404679" H 6150 3200 50  0001 C CNN
+F 4 "2223-CMM-4030D-261-I2S-CT-ND" H 6200 4286 50  0001 C CNN "DigiKey_PN"
+	1    6150 3400
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C_Small C402
+U 1 1 601982B5
+P 5975 2550
+F 0 "C402" V 6204 2550 50  0000 C CNN
+F 1 "C_Small" V 6113 2550 50  0000 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5975 2550 50  0001 C CNN
+F 3 "~" H 5975 2550 50  0001 C CNN
+	1    5975 2550
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:LED D401
+U 1 1 601983D4
+P 6950 2425
+F 0 "D401" V 6988 2307 50  0000 R CNN
+F 1 "LED" V 6897 2307 50  0000 R CNN
+F 2 "LED_SMD:LED_0603_1608Metric" H 6950 2425 50  0001 C CNN
+F 3 "~" H 6950 2425 50  0001 C CNN
+	1    6950 2425
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R_Small R402
+U 1 1 6019858C
+P 6950 2750
+F 0 "R402" H 7009 2796 50  0000 L CNN
+F 1 "R_Small" H 7009 2705 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 6950 2750 50  0001 C CNN
+F 3 "~" H 6950 2750 50  0001 C CNN
+	1    6950 2750
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R_Small R401
+U 1 1 60198612
+P 6200 2400
+F 0 "R401" H 6259 2446 50  0000 L CNN
+F 1 "R_Small" H 6259 2355 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" H 6200 2400 50  0001 C CNN
+F 3 "~" H 6200 2400 50  0001 C CNN
+	1    6200 2400
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6075 2550 6200 2550
+Wire Wire Line
+	6200 2550 6200 2600
+Wire Wire Line
+	6200 2500 6200 2550
+Connection ~ 6200 2550
+$Comp
+L power:GND #PWR0119
+U 1 1 60198D00
+P 5825 2550
+F 0 "#PWR0119" H 5825 2300 50  0001 C CNN
+F 1 "GND" V 5830 2422 50  0000 R CNN
+F 2 "" H 5825 2550 50  0001 C CNN
+F 3 "" H 5825 2550 50  0001 C CNN
+	1    5825 2550
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5825 2550 5875 2550
+Wire Wire Line
+	6950 2650 6950 2575
+Wire Wire Line
+	6200 2300 6200 2225
+Wire Wire Line
+	6200 2225 6950 2225
+Wire Wire Line
+	6950 2225 6950 2275
+Wire Wire Line
+	6200 2550 6700 2550
+Wire Wire Line
+	6700 2550 6700 3050
+$Comp
+L power:GND #PWR0120
+U 1 1 6019A105
+P 6200 3925
+F 0 "#PWR0120" H 6200 3675 50  0001 C CNN
+F 1 "GND" H 6205 3752 50  0000 C CNN
+F 2 "" H 6200 3925 50  0001 C CNN
+F 3 "" H 6200 3925 50  0001 C CNN
+	1    6200 3925
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6200 3925 6200 3750
+$Comp
+L power:GND #PWR0121
+U 1 1 6019A40C
+P 6950 3250
+F 0 "#PWR0121" H 6950 3000 50  0001 C CNN
+F 1 "GND" H 6955 3077 50  0000 C CNN
+F 2 "" H 6950 3250 50  0001 C CNN
+F 3 "" H 6950 3250 50  0001 C CNN
+	1    6950 3250
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6700 3150 6950 3150
+Wire Wire Line
+	6950 3150 6950 3250
+Wire Wire Line
+	6950 3150 6950 2850
+Connection ~ 6950 3150
+Wire Wire Line
+	2750 3250 2325 3250
+Wire Wire Line
+	2325 3350 2750 3350
+Wire Wire Line
+	2325 3450 2750 3450
+Text GLabel 2325 3250 0    50   Input ~ 0
+AUDIO_TX_LR
+Text GLabel 2325 3350 0    50   Input ~ 0
+AUDIO_TX_BCK
+Text GLabel 2325 3450 0    50   Input ~ 0
+AUDIO_TX_DATA
+Text GLabel 6550 2225 1    50   Input ~ 0
+MIC_3.3V
+Text GLabel 5525 3250 0    50   Input ~ 0
+AUDIO_RX_DATA
+Text GLabel 5525 3150 0    50   Input ~ 0
+AUDIO_RX_BCK
+Text GLabel 5525 3050 0    50   Input ~ 0
+AUDIO_RX_LR
+Wire Wire Line
+	5525 3050 5700 3050
+Wire Wire Line
+	5525 3150 5700 3150
+Wire Wire Line
+	5525 3250 5700 3250
+$EndSCHEMATC
