@@ -80,7 +80,7 @@ AR Path="/601FB3A7" Ref="C?"  Part="1"
 AR Path="/601FA14E/601FB3A7" Ref="C401"  Part="1" 
 F 0 "C401" H 2692 2571 50  0000 L CNN
 F 1 "C_Small" H 2692 2480 50  0000 L CNN
-F 2 "" H 2600 2525 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0805_2012Metric" H 2600 2525 50  0001 C CNN
 F 3 "~" H 2600 2525 50  0001 C CNN
 	1    2600 2525
 	1    0    0    -1  
@@ -99,9 +99,7 @@ F 3 "" H 2600 2675 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	2600 2675 2600 2625
-Wire Wire Line
-	2600 2425 3150 2425
+	2600 2675 2600 2650
 Wire Wire Line
 	3150 2425 3150 2500
 Connection ~ 3150 2500
@@ -270,4 +268,20 @@ Wire Wire Line
 	5525 3150 5700 3150
 Wire Wire Line
 	5525 3250 5700 3250
+Wire Wire Line
+	2750 3000 2750 2425
+Wire Wire Line
+	2600 2425 2750 2425
+Connection ~ 2750 2425
+Wire Wire Line
+	2750 2425 3150 2425
+Wire Wire Line
+	2750 3100 2450 3100
+Wire Wire Line
+	2450 3100 2450 2650
+Wire Wire Line
+	2450 2650 2600 2650
+Connection ~ 2600 2650
+Wire Wire Line
+	2600 2650 2600 2625
 $EndSCHEMATC
