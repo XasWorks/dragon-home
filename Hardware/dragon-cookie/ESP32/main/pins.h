@@ -1,4 +1,6 @@
 
+#include <driver/gpio.h>
+#include <vector>
 
 #define HW_PIN_MIC_PWR	GPIO_NUM_25
 
@@ -17,3 +19,5 @@
 }
 
 #define HW_PINS_AUDIO_RX { GPIO_NUM_16, GPIO_NUM_5, -1, GPIO_NUM_17 }
+
+static const std::vector<gpio_num_t> HW_PINS_RGBW = { GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_14, GPIO_NUM_12 };

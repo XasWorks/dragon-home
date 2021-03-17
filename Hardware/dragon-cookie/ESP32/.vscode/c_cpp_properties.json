@@ -18,7 +18,7 @@
                 ],
                 "limitSymbolsToIncludedHeaders": false
             },
-            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
+            "compileCommands": "/home/xasin/XasWorks/dragon-home/Hardware/dragon-cookie/ESP32/build/compile_commands.json"
         }
     ],
     "version": 4
