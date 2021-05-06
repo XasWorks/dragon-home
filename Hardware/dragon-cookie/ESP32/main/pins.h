@@ -14,6 +14,8 @@
 #define HW_PIN_IR_IN	GPIO_NUM_32
 #define HW_RMT_IR_IN	RMT_CHANNEL_2
 
+#define HW_PIN_MOTION	GPIO_NUM_22
+
 #define HW_PINS_AUDIO_TX {\
 	GPIO_NUM_19, GPIO_NUM_21, GPIO_NUM_18, -1\
 }
@@ -21,3 +23,12 @@
 #define HW_PINS_AUDIO_RX { GPIO_NUM_16, GPIO_NUM_5, -1, GPIO_NUM_17 }
 
 static const std::vector<gpio_num_t> HW_PINS_RGBW = { GPIO_NUM_26, GPIO_NUM_27, GPIO_NUM_14, GPIO_NUM_12 };
+
+#define BR_SCALING_FACT (2.5F)
+
+#define GREEN_CALIB_FACT (0.55F)
+#define BLUE_CALIB_FACT  (0.2289F)
+
+#define RGBWW_R_FACT (1.0F*2.1F)
+#define RGBWW_G_FACT (0.8F*2.1F)
+#define RGBWW_B_FACT (0.67F*2.1F)
