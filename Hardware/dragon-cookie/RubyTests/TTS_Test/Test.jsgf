@@ -1,0 +1,12 @@
+#JSGF V1.0;
+
+grammar test;
+
+<reply> = ( yes | no );
+
+<teatype> = ( black | chai | pepper mint );
+<tea> = i am making some [ <teatype> ] tea;
+
+<command> = [ computer ] ((enable | disable) ambient lights | identify | i am going jogging | <tea>) [ please ];
+
+public <test> = ( [reply] <reply> | <command> | <teatype> );
