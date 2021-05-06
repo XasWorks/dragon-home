@@ -1,3 +1,4 @@
 (sym_lib_table
   (lib (name XasParts)(type Legacy)(uri /home/xasin/XasWorks/dragon-home/XasCode/KiCAD/XasParts.lib)(options "")(descr ""))
+  (lib (name KiCAD_Board-rescue)(type Legacy)(uri ${KIPRJMOD}/KiCAD_Board-rescue.lib)(options "")(descr ""))
 )
