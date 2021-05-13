@@ -6,8 +6,6 @@ require_relative '../audio/Sphinx_Receiver.rb'
 
 require_relative 'TTS_Generator.rb'
 
-require_relative '../conversation/CookieConversation.rb'
-
 module XNM
     module DragonHome
         class Cookie
@@ -31,12 +29,6 @@ module XNM
                 ERROR: 5,
                 ALERT: 5
             };
-
-            NOTIFICATION_SOUNDS = {
-                INFO: 'info_start.mp3',
-                WORKING: 'working.mp3',
-                WARN: 'warn_start.mp3'
-            }
 
             def initialize(mqtt, key)
                 @mqtt = mqtt;
@@ -63,6 +55,10 @@ module XNM
                 setup_mqtt();
 
                 setup_record_cb();
+
+                self.ambient_lights = "#000000";
+                @mqtt.publish_to @base_topic + 'audio/set_recording', 'N', retain: true, qos: 1
+                @mqtt.publish_to @base_topic + 'notification/set', '', retain: true, qos: 1
             end
 
             private def setup_record_cb()
@@ -98,8 +94,8 @@ module XNM
                 out_hash = {}
 
                 if(new_state.is_a?(Hash))
-                    out_hash = new_state
-                    new_state = out_hash[:state] || out_hash[:level]
+                    out_hash = new_state.clone
+                    new_state = out_hash[:level] || out_hash[:state]
                 end
 
                 raise ArgumentError, "Next state is invalid!" unless WARN_STATES.include? new_state
@@ -120,10 +116,6 @@ module XNM
                 @ambient_lights = new_lights;
                 
                 @mqtt.publish_to @base_topic + 'AmbientOn', @ambient_lights ? '1' : '0', retain: true, qos: 1
-            end
-
-            def on_record_done(&block)
-                @microphone.on_record_done(&block);
             end
 
             def start_recording(filename)
@@ -152,41 +144,60 @@ module XNM
                 @mqtt.publish_to @base_topic + 'audio/set_recording', @is_recording ? 'Y' : 'N', qos: 1, retain: true;
             end
 
-            def play_file(file)
-                source = OpusStream::FileSource.new(file);
+            def speak_text(text, blocking: true)
+                if(text.is_a? String)
+                    tts_cfg = { text: text } 
+                else
+                    tts_cfg = text.clone
+                end
+
+                TTSGen::generate_tts(tts_cfg);
+            
+                @current_audio_source = OpusStream::FileSource.new(tts_cfg[:ttsfile]);
+                File.delete(tts_cfg[:ttsfile]);
                 
+                @speaker << @current_audio_source
+
+                return unless blocking
+
                 th = Thread.current
-                source.on_finish do
+                @current_audio_source.on_finish { th.run };
+
+                Thread.stop() until @current_audio_source.is_done?
+            end
+
+            def play_file(file, blocking: true)
+                @current_audio_source = OpusStream::FileSource.new(file);
+                @speaker << @current_audio_source
+                
+                return @current_audio_file unless blocking
+
+                th = Thread.current
+                @current_audio_source.on_finish do
                     th.run 
                 end
 
-                @speaker << source
-
-                Thread.stop until source.is_done?
+                Thread.stop until @current_audio_source.is_done?
             end
 
-            def next_conversation()
-                return if @message_current&.running?
+            def get_recording(filename = nil)
+                filename ||= "/tmp/dragoncookie-recording-#{SecureRandom.uuid}.wav"
 
-                if(!@message_queue.empty?)
-                    @message_current = CookieConversation.new(@message_queue.pop, self);
-                elsif(!(@on_speech_done&.call()))
-                    wrapup    = OpusStream::FileSource.new(File.join(File.dirname(__FILE__), '..', 'sound_samples', 'info_end.mp3'));
-                    wrapup.on_finish do
-                        self.warn_state = :IDLE
-                    end
-
-                    speaker << wrapup
-                    @message_current = nil;
+                recorded_name = nil;
+                th = Thread.current
+                
+                @microphone.on_record_done do |fName|
+                    puts "Done recording from inside sys!"
+                    
+                    recorded_name = fName;
+                    th.run
                 end
-            end
+                
+                start_recording(filename)
 
-            def is_speaking?
-                return !@message_current.nil?
-            end
-            def send_message(message)
-                @message_queue << message
-                next_conversation();
+                Thread.stop() while recorded_name.nil?
+
+                return recorded_name
             end
         end
     end
