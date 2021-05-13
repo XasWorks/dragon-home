@@ -89,13 +89,13 @@ namespace HW {
 				if(transmit_audio)
 					mqtt.publish_to("audio/record", bfr.data(), bfr.size() * 2);
 
-				if(audio_silence_ticks < 100) {
-					if((audio_silence_ticks > -50) && (microphone.get_volume_estimate() > -20))
+				if(audio_silence_ticks < 50) {
+					if((microphone.get_volume_estimate() > -18))
 						audio_silence_ticks = 0;
 					else
 						audio_silence_ticks++;
 
-					if(audio_silence_ticks >= 100)
+					if(audio_silence_ticks >= 50)
 						mqtt.publish_int("audio/recording_silence", 1);
 				}
 			}
@@ -219,7 +219,8 @@ namespace HW {
 		});
 		mqtt.subscribe_to("audio/set_recording", [](Xasin::MQTT::MQTT_Packet data) {
 			transmit_audio = (data.data == "Y");
-			audio_silence_ticks = -150;
+			if(transmit_audio)
+				audio_silence_ticks = -150;
 		});
 
 		audio_tx_stream.start(false);

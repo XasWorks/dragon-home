@@ -13,7 +13,10 @@
 			"path": "../../../../../Xasin/system-synth-suit"
 		},
 		{
-			"path": "../../../../../Xasin/WuffmasPresentV3/Ruby"
+			"path": "../../../XasCode"
+		},
+		{
+			"path": "../../../../../Xasin/TRRIAN/Yyunko/Chritmiss19/ESP32"
 		}
 	],
 	"settings": {
