@@ -29,6 +29,17 @@ Color get_default_idle_color() {
     return Material::PURPLE;
 }
 
+uint8_t get_current_indicator_brightness() {
+    switch(state) {
+        default: return 0;
+        case IDLE:
+        case WORKING:
+        case INFO: return 255 * HW::get_recommended_notification_brightness();
+        case WARN_DISCO: return 100 + 155 * HW::get_recommended_notification_brightness();
+        case WARN_FLASH: return 255;
+    }
+}
+
 void tick() {
     Color speaker_color = Color(Material::PURPLE, std::min(255, std::max<int>(0, (255 * (HW::speaker.get_volume_estimate() + 30)) / 20)));
     speaker_color.bMod(255 * HW::get_recommended_notification_brightness());

@@ -23,6 +23,8 @@ namespace IND {
 
     extern ind_state_t state;
 
+    uint8_t get_current_indicator_brightness();
+
     void tick();
     void init();
 

@@ -16,6 +16,9 @@
 #include <esp_log.h>
 #include <cJSON.h>
 
+#include <esp_wn_iface.h>
+#include <esp_wn_models.h>
+
 namespace HW {
 	Xasin::I2C::LT303ALS lt303als;
 	Xasin::I2C::BME680   bme(0b1110111);
@@ -32,6 +35,10 @@ namespace HW {
 	bool transmit_audio     = false;
 	int audio_silence_ticks = 0;
 
+	static const esp_wn_iface_t *wakenet = &WAKENET_MODEL;
+	static const model_coeff_getter_t *model_coeff_getter = &WAKENET_COEFF;
+	model_iface_data_t *wakenet_model = nullptr;
+
 	int whistle_detect_ticks = 0;
 	int whistle_detect_fail_ticks = 0;
 	enum whistle_detect_stage_t {
@@ -39,20 +46,8 @@ namespace HW {
 		WAIT_WHISTLE_2
 	} whistle_stage = WAIT_WHISTLE_1;
 
-	void audio_processing_loop(void *args) {
-		while (true)
-		{
-			xTaskNotifyWait(0, 0, nullptr, portMAX_DELAY);
-
-			if(XNM::NetHelpers::OTA::get_state() == XNM::NetHelpers::OTA::DOWNLOADING) {
-				microphone.get_buffer();
-				continue;
-			}
-
-			speaker.largestack_process();
-
-			while(microphone.has_new_audio()) {
-				int wanted_tone = (whistle_stage == WAIT_WHISTLE_1) ? 800 : 1200;
+	void run_whistle_detec() {
+		int wanted_tone = (whistle_stage == WAIT_WHISTLE_1) ? 800 : 1200;
 				if(microphone.get_goertzel(wanted_tone, 160) > 0.0015) {
 					whistle_detect_fail_ticks = std::max(0, whistle_detect_fail_ticks - 1);
 					whistle_detect_ticks++;
@@ -83,8 +78,28 @@ namespace HW {
 							whistle_detect_fail_ticks++;
 					}
 				}
+	}
 
+	void audio_processing_loop(void *args) {
+		while (true)
+		{
+			xTaskNotifyWait(0, 0, nullptr, portMAX_DELAY);
+
+			if(XNM::NetHelpers::OTA::get_state() == XNM::NetHelpers::OTA::DOWNLOADING) {
+				microphone.get_buffer();
+				continue;
+			}
+
+			speaker.largestack_process();
+
+			while(microphone.has_new_audio()) {
 				auto bfr = microphone.get_buffer();
+
+				int r = wakenet->detect(wakenet_model, bfr.data());
+				if(r > 0) {
+					mqtt.publish_int("whistle_detect", 1);
+					ESP_LOGI("Atest", "Got return of %d!", r);
+				}
 
 				if(transmit_audio)
 					mqtt.publish_to("audio/record", bfr.data(), bfr.size() * 2);
@@ -224,6 +239,10 @@ namespace HW {
 		});
 
 		audio_tx_stream.start(false);
+
+		wakenet_model = wakenet->create(model_coeff_getter, DET_MODE_90);
+
+		vTaskDelay(100);
 
 		Xasin::Trek::init(speaker);
 		Xasin::Trek::play(Xasin::Trek::PROG_DONE);

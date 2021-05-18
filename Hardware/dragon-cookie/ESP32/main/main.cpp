@@ -53,6 +53,8 @@ void test_lights(void *arg) {
     TickType_t tick = xTaskGetTickCount();
     TickType_t last_pir_tick = 0;
 
+    static bool last_occupation = false;
+
     while(true) { 
         vTaskDelay(6);
         
@@ -76,6 +78,9 @@ void test_lights(void *arg) {
             last_pir_tick = xTaskGetTickCount();
         }
         HW::room_occupied = (xTaskGetTickCount() - last_pir_tick) < (10*60*1000 / portTICK_PERIOD_MS);
+        if(HW::room_occupied != last_occupation)
+            mqtt.publish_to("sensors/occupancy", HW::room_occupied ? "1" : "0", 1, true, 1);
+        last_occupation = HW::room_occupied;
 
         HW::IND::tick();
         

@@ -5,6 +5,9 @@
 #include <xasin/neocontroller.h>
 
 #include <esp_log.h>
+#include <cmath>
+
+#include "indicators.h"
 
 using namespace Xasin;
 using namespace NeoController;
@@ -84,6 +87,7 @@ namespace HW {
 
     void light_tick() {
         static TickType_t mqtt_tick = 0;
+        static uint8_t last_indicator_brightness = 0;
 
         ambient_smoothing.merge_overlay(get_current_ambient_rec(), ambient_fade_speed);
         ambient_recommendation.merge_overlay(ambient_smoothing, ambient_fade_speed);
@@ -94,6 +98,12 @@ namespace HW {
             char bfr[10] = {};
             snprintf(bfr, 10, "#%06X", ambient_recommendation.getPrintable());
             mqtt.publish_to("AmbientCurrent", bfr, strlen(bfr), 1);
+        }
+
+        if(fabs(IND::get_current_indicator_brightness() - int(last_indicator_brightness)) > 10) {
+            last_indicator_brightness = IND::get_current_indicator_brightness();
+
+            mqtt.publish_int("notification/brightness", last_indicator_brightness, true, 1);
         }
     }
 
