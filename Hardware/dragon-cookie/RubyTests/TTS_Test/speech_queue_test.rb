@@ -3,22 +3,44 @@
 require_relative 'lib/dragon-home/hooks/HookHandler'
 require_relative 'lib/dragon-home/conversation/TelegramConvoEndpoint'
 
+require 'mqtt/sub_handler'
+require_relative 'lib/dragon-home/interface/CookieRoom.rb'
+require_relative 'lib/dragon-home/interface/DragonHomeCore.rb'
+
+require_relative 'lib/dragon-home/misc/StargateAccessory.rb'
+
 require 'xnm/telegram/Handler.rb'
 
-$telegram = XNM::Telegram::Handler.new("453888137:AAHV4-Z5egfGKanRaOqHLIQSkw_se2Q5JWQ");
-$hook_core = XNM::DragonHome::HookHandler.new()
+require 'yaml'
 
+$config = YAML.load(File.read('TestCFG.yaml'));
 
-$tg_user = $telegram[87816854];
-$tg_convo = XNM::Conversation::TelegramConversationEndpoint.new($tg_user)
+$mqtt = MQTT::SubHandler.new($config['MQTT_URI']);
+$telegram = XNM::Telegram::Handler.new($config['TelegramToken']);
 
-$tg_convo.on_convo_reply do |convo| 
-    $hook_core.send_conversation convo
+$home_core = XNM::DragonHome::Core.new($mqtt);
+
+$cookie = XNM::DragonHome::ConversationCookie.new($mqtt, 'E0.E2.E6.56.14.D0');
+$cookie_room = XNM::DragonHome::CookieRoom.new(:fstr_office, $home_core, $cookie)
+$home_core << $cookie_room
+
+$stargate = XNM::DragonHome::StargateAccessory.new($mqtt, '3C.71.BF.0A.88.80');
+$cookie_room << $stargate
+
+$test_user = XNM::DragonHome::User.new('xaseiresh', $home_core);
+
+$tg_user = $telegram[$config['users']['xaseiresh']['tg_id']];
+$tg_convo = XNM::Conversation::TelegramConversationEndpoint.new($tg_user, $home_core)
+
+$test_user.conversation_outputs << $tg_convo
+$test_user.room = $cookie_room
+
+Thread.new do
+sleep 15
+$test_user.send_message("How are you doing?");
 end
 
-$tg_user.send_message("How are you doing?", inline_keyboard: {"Good" => 'g', "Not good" => 'n'});
-
-$hook_core.define_hook :gate do |h|
+$home_core.define_hook :gate do |h|
     h.on :conversationReply do |c|
         if(c.to_s =~ /(stop|start) dialing sequence/)
             $mqtt.publish_to "/esp32/WuffGate/3C.71.BF.0A.88.80/SetTarget", $1 == "stop" ? 0 : 7, retain: true
@@ -28,7 +50,7 @@ $hook_core.define_hook :gate do |h|
     end
 end
 
-$hook_core.define_hook :tea_hook do |h|
+$home_core.define_hook :tea_hook do |h|
     h.on :conversationReplyTea do |convo|
         convo.reply "Good, we're making some #{convo.to_s} tea";
     end
@@ -38,15 +60,23 @@ $hook_core.define_hook :tea_hook do |h|
             convo.tag = :tea
 
             if($1 == '')
-                convo.inquire("What kind of tea?", jsgf: 'TeaType.jsgf') { |c| $hook_core.send_conversation(c) };
+                convo.inquire("What kind of tea?", jsgf: 'TeaType.jsgf') { |c| $home_core.send_conversation(c) };
             else
                 convo.reply "Good, we're making some #{$1} tea";
             end
         end
     end
+
+    h.on :roomOccupancyChanged do
+        if $cookie_room.is_occupied?
+            $test_user.send_message("Welcome back!") 
+        else
+            $test_user.send_message("Goodbye :>");
+        end
+    end
 end
 
-$hook_core.define_hook :random_hello do |h|
+$home_core.define_hook :random_hello do |h|
     h.on :conversationReply do |convo|
         case convo.to_s
         when /(disable|enable) ambient lights/
@@ -54,20 +84,11 @@ $hook_core.define_hook :random_hello do |h|
 
             convo.reply $1 + 'ing lights';
         else
-            convo.inquire("Right, you said #{convo.user_text}, correct?") do |c|
-                c.reply(c.user_text =~ /yes/ ? "Very good!" : "Sorry, nevermind then", tts_engine: :arctic);
-            end
+            convo.reply("Right, you said #{convo.user_text}, correct?")
         end
-        
     end
 end
 
-require 'mqtt/sub_handler'
-require_relative 'lib/dragon-home/cookie/ConversationCookie.rb'
-
-$mqtt = MQTT::SubHandler.new('192.168.178.230');
-
-$cookie = XNM::DragonHome::ConversationCookie.new($mqtt, 'E0.E2.E6.56.14.D0');
 $base_topic = "/esp32/dragon-cookie/E0.E2.E6.56.14.D0/"
 
 $whistle_lockout = Time.now();
@@ -78,8 +99,9 @@ $mqtt.subscribe_to $base_topic + "whistle_detect" do
     puts "got a whistle"
 
     convo = XNM::Conversation::BaseConversation.new()
-    convo.inquire(nil, jsgf: 'Test.jsgf') { |c| $hook_core.send_conversation(c) }
-
+    convo.inquire(nil, jsgf: 'Test.jsgf') { |c| $home_core.send_conversation(c) }
+    
+    $cookie.whistle_detected = true
     $cookie.send_message(convo);
 end
 
@@ -107,7 +129,7 @@ post '/api/grafana/notifications' do
         }
     end
 
-    $cookie.send_message(msg);
+    $test_user.send_message(msg);
 
     return 'OK';
 end

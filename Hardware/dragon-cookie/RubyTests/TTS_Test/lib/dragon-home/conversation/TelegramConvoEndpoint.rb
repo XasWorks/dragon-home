@@ -1,10 +1,14 @@
 
+require_relative 'ConversationOutput.rb'
 
 module XNM
     module Conversation
         class TelegramConversationEndpoint
-            def initialize(tg_handler)
+            include Output
+
+            def initialize(tg_handler, home_core)
                 @telegram_chat = tg_handler
+                @home_core = home_core
 
                 @on_msg_reply = nil;
 
@@ -12,7 +16,7 @@ module XNM
                 @msg_id_map = {}
                 @convo_tag_id_map = {}
 
-                @conversation_queue = Queue.new
+                init_conversation_output
 
                 @conversation_thread = Thread.new do
                     convo_thread
@@ -20,11 +24,7 @@ module XNM
                 @conversation_thread.abort_on_exception = true
 
                 @telegram_chat.on_message do |msg|
-                    puts "Message replies to #{msg.reply_to_id}"
-
                     if(rid = msg.reply_to_id)
-                        puts "Message was replied to #{rid}"
-
                         conversation = @msg_id_map[rid]
                         @msg_id_map.delete rid
                     end
@@ -33,17 +33,15 @@ module XNM
 
                     conversation.set_user_answer(msg.to_s)
 
-                    @conversation_queue << conversation
+                    queue_conversation conversation
                 end
             end
 
             private def convo_thread
                 loop do
-                    @current_conversation = @conversation_queue.pop()
+                    @current_conversation = next_conversation(blocking: true)
                     
-                    if(@current_conversation.has_new_reply)
-                        @on_msg_reply&.call(@current_conversation)
-                    end
+                    @home_core.send_conversation(@current_conversation) if(@current_conversation.has_new_reply)
 
                     text = @current_conversation.reply_data.dig(:text)
                     msg = @telegram_chat.send_message text, inline_keyboard: {'Yes!' => 'Yes :>'} if text.is_a? String
@@ -55,7 +53,6 @@ module XNM
 
                         @convo_tag_id_map[@current_conversation.tag] = msg.message_id
                         
-                        puts "MSG #{msg.message_id} associated with conversation tag #{@current_conversation.tag}"
                         @msg_id_map[msg.message_id] = @current_conversation
                     end
                     
@@ -63,22 +60,14 @@ module XNM
                 end
             end
 
-            def on_convo_reply(&block)
-                @on_msg_reply = block;
+            def rate_conversation(convo)
+                return 0;
             end
-            def send_message(message)
-                if(message.is_a? String)
-                    text = message;
-                    message = Conversation::BaseConversation.new();
-                    message.respond text
-                elsif(message.is_a? Hash)
-                    h = message
-                    message = Conversation::BaseConversation.new();
-                    message.level = h[:level] if h.include? :level
-                    message.respond h[:text], **h
-                end
 
-                @conversation_queue << message;
+            alias :send_message :queue_conversation
+
+            def is_available?(convo)
+                return true
             end
         end
     end

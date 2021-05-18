@@ -7,6 +7,6 @@ grammar test;
 <teatype> = ( black | chai | pepper mint );
 <tea> = i am making some [ <teatype> ] tea;
 
-<command> = [ computer ] ((enable | disable) ambient lights | identify | i am going jogging | <tea>) [ please ];
+<command> = [ computer ] ((enable | disable) ambient lights | identify | i am going jogging | <tea> | report sensor data | ( stop | start ) dialing sequence ) [ please ];
 
-public <test> = ( [reply] <reply> | <command> | <teatype> );
+public <test> = ( [reply] <reply> | <command> );

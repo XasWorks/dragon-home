@@ -1,12 +1,14 @@
 
 
 require_relative 'DragonCookie.rb'
-require_relative '../conversation/Conversation.rb'
+require_relative '../conversation/ConversationOutput'
 
 
 module XNM
     module DragonHome
         class ConversationCookie < Cookie
+            include Conversation::Output
+
             NOTIFICATION_SOUNDS = {
                 INFO: 'info_start.mp3',
                 WORKING: 'working.mp3',
@@ -14,11 +16,12 @@ module XNM
             }
 
             attr_accessor :conversation_end_time
+            attr_accessor :whistle_detected
 
             def initialize(mqtt, key)
                 super(mqtt, key);
 
-                @conversation_queue = Queue.new();
+                init_conversation_output()
 
                 @conversation_thread = Thread.new do
                     convo_thread
@@ -55,12 +58,11 @@ module XNM
                             record_file = get_recording();
 
                             jsgf = c_convo.inquiry_options[:jsgf];
-                            parsed_text = `pocketsphinx_continuous -infile #{record_file} -logfn /dev/null #{(!jsgf.nil?) ? '-jsgf ' + jsgf : ''}`
-
-                            # TODO replace with a call to logging?
-                            puts "Parsed text was: #{parsed_text}"
+                            parsed_text = `pocketsphinx_continuous -infile #{record_file} -logfn /dev/null #{(!jsgf.nil?) ? '-jsgf ' + jsgf : ''} 2>/dev/null`
 
                             c_convo.set_user_answer(parsed_text)
+
+                            @conversation_callback&.call(c_convo)
                         ensure
                             File.delete record_file
                         end
@@ -71,38 +73,45 @@ module XNM
             end
 
             private def convo_thread()
+                @conversation_thread_waiting = Thread.current
+
                 loop do
-                    @current_conversation = @conversation_queue.pop()
+                    Thread.stop() until (@whistle_detected || (!@conversation_queue.empty?() && (@sensor_data['pir_motion'] == 1)))
+
+                    @current_conversation = next_conversation()
 
                     handle_conversation @current_conversation
-                    
+
                     if(@conversation_queue.empty?)
                         play_file File.join(File.dirname(__FILE__), '..', 'sound_samples', 'info_end.mp3')
                         self.warn_state = :IDLE
 
                         @current_conversation = nil;
+                        @whistle_detected = false
 
                         @conversation_end_time = Time.now();
                     end
                 end
             end
             
+            private def update_sensor_data(data)
+                super(data)
+                
+                @conversation_thread.run()
+            end
+
             def on_convo_reply(&block)
                 @conversation_callback = block;
             end
-            def send_message(message)
-                if(message.is_a? String)
-                    text = message;
-                    message = Conversation::BaseConversation.new();
-                    message.respond text
-                elsif(message.is_a? Hash)
-                    h = message
-                    message = Conversation::BaseConversation.new();
-                    message.level = h[:level] if h.include? :level
-                    message.respond h[:text], **h
-                end
 
-                @conversation_queue << message;
+            def queue_conversation(convo)
+                @current_conversation ||= convo
+                super(convo)
+            end
+
+            def send_message(message, **opts)
+                message = Conversation.to_convo(message, **opts)   
+                queue_conversation(message);
             end
             def is_speaking?
                 return !@current_conversation.nil?

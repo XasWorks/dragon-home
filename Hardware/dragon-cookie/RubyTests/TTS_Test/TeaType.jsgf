@@ -1,0 +1,6 @@
+#JSGF V1.0;
+
+grammar teas;
+
+
+public <teatypes> = ( black | chai | pepper mint );

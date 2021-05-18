@@ -15,6 +15,7 @@ module XNM
             attr_reader :warn_state
 
             attr_reader :sensor_data
+            attr_reader :occupancy
 
             attr_reader :recording
 
@@ -38,6 +39,7 @@ module XNM
 
                 @warn_state = :IDLE;
                 @sensor_data = {};
+                @occupancy   = false
 
                 @message_queue   = Queue.new();
                 @message_current = nil;
@@ -73,21 +75,43 @@ module XNM
                 end
 
                 @mqtt.subscribe_to @base_topic + "sensors" do |data|
-                    begin
-                        data = JSON.parse(data);
-                        
-                        @sensor_data.merge!(data);
-                    rescue
-                    end        
+                    update_sensor_data(data);
                 end
 
                 @mqtt.subscribe_to @base_topic + "audio/recording_silence" do 
                     self.recording = false;
                 end
 
+                @mqtt.subscribe_to @base_topic + "notification/brightness" do |data|
+                    @indicator_brightness = data.to_i / 255.0;
+                    @indicator_brightness_proc&.call(@indicator_brightness)
+                end
+
                 @mqtt.subscribe_to @base_topic + 'AmbientOn' do |data|
                     @ambient_lights = (data == '1');
                 end
+
+                @mqtt.subscribe_to @base_topic + 'sensors/occupancy' do |data|
+                    @occupancy = (data == '1')
+                    @sensor_update_proc&.call({'occupancy' => @occupancy})
+                end
+            end
+
+            private def update_sensor_data(data)
+                begin
+                    data = JSON.parse(data);
+                    @sensor_data.merge!(data);
+                rescue
+                end
+
+                @sensor_update_proc&.call(data)
+            end
+
+            def on_sensor_update(&block)
+                @sensor_update_proc = block;
+            end
+            def on_indicator_brightness_change(&block)
+                @indicator_brightness_proc = block
             end
 
             def warn_state=(new_state)

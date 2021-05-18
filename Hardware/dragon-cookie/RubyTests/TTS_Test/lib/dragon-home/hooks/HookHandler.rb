@@ -25,7 +25,7 @@ module XNM
             end
 
             def send_event(tag, *extra_opts)
-                @hooks.each { |h| h.feed_callback_data(tag, extra_opts) }
+                @hooks.each { |_, h| h.feed_callback_data(tag, extra_opts) }
             end
 
             def send_conversation(conversation)
