@@ -1,0 +1,17 @@
+#JSGF V1.0;
+
+grammar test;
+
+<digit> = ( zero | one | two | three | four | five | six | seven | eight | nine );
+
+<reply> = ( yes | no );
+
+<teatype> = ( black | chai | pepper mint | quick );
+<tea> = ( i am making some [ <teatype> ] tea | how long for the tea );
+
+<lights> = ((enable|disable) ambient lights | lights to <digit> thousand kelvin | (warm | cold) lights );
+<stargate> = (( stop | start ) dialing sequence);
+
+<command> = [ computer ] (<lights> | <tea> | report sensor data | <stargate> ) [ please ];
+
+public <test> = ( [reply] <reply> | <command> );

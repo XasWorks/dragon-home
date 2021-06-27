@@ -1,0 +1,6 @@
+#JSGF V1.0;
+
+grammar test;
+
+
+public <teas> = ( black | pepper mint | chai ) [ tea ];
