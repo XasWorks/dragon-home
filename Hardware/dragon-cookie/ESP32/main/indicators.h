@@ -18,6 +18,8 @@ namespace IND {
         WARN_DISCO,
         WARN_FLASH,
 
+        DRAMATIC,
+
         IND_MAX
     };
 

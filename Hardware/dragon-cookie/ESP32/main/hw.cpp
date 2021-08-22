@@ -13,14 +13,20 @@
 
 #include <math.h>
 
+#define LOG_LOCAL_LEVEL ESP_LOG_DEBUG
 #include <esp_log.h>
 #include <cJSON.h>
 
 #include <esp_wn_iface.h>
 #include <esp_wn_models.h>
 
+#include <esp_agc.h>
+#include <esp_ns.h>
+
 namespace HW {
 	Xasin::I2C::LT303ALS lt303als;
+	float smoothed_lt_meas;
+	
 	Xasin::I2C::BME680   bme(0b1110111);
 
 	Xasin::MQTT::Handler mqtt;
@@ -34,6 +40,9 @@ namespace HW {
 	Xasin::Audio::TXStream audio_tx_stream(speaker);
 	bool transmit_audio     = false;
 	int audio_silence_ticks = 0;
+
+	void *agc_handle = nullptr;
+	ns_handle_t ns_handle  = nullptr;
 
 	static const esp_wn_iface_t *wakenet = &WAKENET_MODEL;
 	static const model_coeff_getter_t *model_coeff_getter = &WAKENET_COEFF;
@@ -93,7 +102,15 @@ namespace HW {
 			speaker.largestack_process();
 
 			while(microphone.has_new_audio()) {
-				auto bfr = microphone.get_buffer();
+				Xasin::Audio::rx_buffer_t b1 = microphone.get_buffer();
+				Xasin::Audio::rx_buffer_t b2;
+				Xasin::Audio::rx_buffer_t bfr = {};
+
+				ns_process(ns_handle, b1.data(), b2.data());
+				for(int i=0; i<3; i++) {
+					int ptr_shift = i*160;
+					esp_agc_process(agc_handle, b2.data() + ptr_shift, bfr.data() + ptr_shift, 160, 16000);
+				}
 
 				int r = wakenet->detect(wakenet_model, bfr.data());
 				if(r > 0) {
@@ -158,7 +175,7 @@ namespace HW {
 	}
 
 	float get_recommended_notification_brightness() {
-		return std::max<float>(0.15F, std::min<float>(1, (HW::lt303als.get_brightness().als_ch1 - 16) / 200.F));
+		return std::max<float>(0.15F, std::min<float>(1, (smoothed_lt_meas - 16) / 200.F));
 	}
 
 #define RGBWWSETNOSQR(value, ch) ledc_set_duty_and_update(LEDC_HIGH_SPEED_MODE, static_cast<ledc_channel_t>(ch), ((1<<11) - 1) * std::max(0.0F, std::min(1.0F, value)), 0xFFFFF)
@@ -201,6 +218,10 @@ namespace HW {
 		RGBWWSETNOSQR(max_w_count * downscale_fact, 3);
 	}
 
+	void fx_tick() {
+		smoothed_lt_meas = 0.992 * smoothed_lt_meas + 0.008 * HW::lt303als.get_brightness().als_ch1;
+	}
+
 	void init() {
 		init_gpios();
 
@@ -240,12 +261,15 @@ namespace HW {
 
 		audio_tx_stream.start(false);
 
+		agc_handle = esp_agc_open(3, 16000);
+		set_agc_config(agc_handle, 40, 1, -6);
+		ns_handle  = ns_create(30);
+
 		wakenet_model = wakenet->create(model_coeff_getter, DET_MODE_90);
 
-		vTaskDelay(100);
+		microphone.start();
 
-		Xasin::Trek::init(speaker);
-		Xasin::Trek::play(Xasin::Trek::PROG_DONE);
+		vTaskDelay(100);
 	}
 
 	bool is_motion_triggered() {

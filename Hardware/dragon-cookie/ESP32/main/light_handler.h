@@ -9,6 +9,5 @@ namespace HW {
 
     void light_tick();
 
-    void init_ambient_mqtt();
     void cancel_fade();
 }

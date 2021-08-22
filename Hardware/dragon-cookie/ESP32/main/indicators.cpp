@@ -30,7 +30,12 @@ Color get_default_idle_color() {
 }
 
 uint8_t get_current_indicator_brightness() {
-    switch(state) {
+    ind_state_t local_state = state;
+
+    if(HW::transmit_audio)
+        local_state = WORKING;
+
+    switch(local_state) {
         default: return 0;
         case IDLE:
         case WORKING:
@@ -41,21 +46,28 @@ uint8_t get_current_indicator_brightness() {
 }
 
 void tick() {
-    Color speaker_color = Color(Material::PURPLE, std::min(255, std::max<int>(0, (255 * (HW::speaker.get_volume_estimate() + 30)) / 20)));
+    Color speaker_color = Color(Material::PURPLE, std::min(255, std::max<int>(0, (150 * (HW::speaker.get_volume_estimate() + 30)) / 20)));
     speaker_color.bMod(255 * HW::get_recommended_notification_brightness());
 
     leds.colors.fill(speaker_color);
 
-    overlay_color.merge_transition(Color(0, 0, 0), state == IDLE ? 2000 : 50000);
+    overlay_color.merge_transition(Color(0, 0, 0), state == IDLE ? 2000 : 5000);
+
+    ind_state_t local_state = state;
+    Color local_notification_color = notification_color;
+
+    if(HW::transmit_audio) {
+        local_notification_color = Material::PURPLE;
+        local_state = WORKING;
+    }
 
     uint32_t indicator_ticks = xTaskGetTickCount() - notification_start;
-
-    switch(state) {
+    switch(local_state) {
     default: break;
     
     case IDLE: {
         Color idle_c = get_default_idle_color();
-        idle_c.merge_overlay(notification_color);
+        idle_c.merge_overlay(local_notification_color);
 
         idle_c.bMod(160 * HW::get_recommended_notification_brightness());
 
@@ -71,7 +83,7 @@ void tick() {
 
     case INFO: {
         Color info_c = Material::GREEN;
-        info_c.merge_overlay(notification_color);
+        info_c.merge_overlay(local_notification_color);
         info_c.bMod(255.0F * HW::get_recommended_notification_brightness());
 
         float info_time = (indicator_ticks / (500.0F/portTICK_PERIOD_MS));
@@ -95,7 +107,7 @@ void tick() {
 
     case WORKING: {
         Color work_c = Material::PURPLE;
-        work_c.merge_overlay(notification_color);
+        work_c.merge_overlay(local_notification_color);
         work_c.bMod(255 * HW::get_recommended_notification_brightness());
 
         float work_phase = 2 * M_PI * indicator_ticks / (3000.0F / portTICK_PERIOD_MS);
@@ -111,7 +123,7 @@ void tick() {
 
     case WARN_DISCO: {
         Color warn_c = Material::ORANGE;
-        warn_c.merge_overlay(notification_color);
+        warn_c.merge_overlay(local_notification_color);
         warn_c.bMod(100 + 155 * HW::get_recommended_notification_brightness());
 
         overlay_color = Color(0xBBBBBB, 255, 150);
@@ -131,7 +143,7 @@ void tick() {
 
     case WARN_FLASH: {
         Color warn_c = Material::RED;
-        warn_c.merge_overlay(notification_color);
+        warn_c.merge_overlay(local_notification_color);
 
         static bool has_flashed = false;
         overlay_color = Color(0xBBBBBB);
@@ -155,6 +167,23 @@ void tick() {
 
         has_flashed = true;
     }
+    break;
+
+    case DRAMATIC: {
+        Color warn_c = Material::RED;
+        warn_c.merge_overlay(local_notification_color);
+
+        int anim_phase = (indicator_ticks) / (50) % 10;
+        if((1<<anim_phase & 0b1001010010) == 0 || (indicator_ticks % 50 > 30))
+            break;
+
+        for(int i = (anim_phase <= 5) ? 0 : 1; i < 6; i +=2 )
+            leds.colors[i] = warn_c;
+
+        if(anim_phase == 1)
+            overlay_color = warn_c;
+    }
+    break;
     }
 }
 
