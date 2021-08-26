@@ -12,7 +12,10 @@
 #include <xnm/property_point/SingleProperty.h>
 #include <xnm/property_point/JSONProperty.h>
 
+
 namespace CON {
+	// extern XNM::BLE::Server ble;
+
 	extern XNM::PropertyPoint::Handler propp;
 	extern XNM::PropertyPoint::MQTTOutput propp_output;
 

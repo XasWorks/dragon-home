@@ -1,12 +1,17 @@
 
+#include <xnm/ble.h>
+#include <xnm/property_point/BLEOutput.h>
 
 #include "connectivity.h"
 
 namespace CON {
+	XNM::BLE::Server ble;
+
 	XNM::PropertyPoint::Handler propp;
 
 	XNM::PropertyPoint::MQTTOutput propp_mqtt(propp, HW::mqtt);
-	
+	XNM::PropertyPoint::BLEOutput  propp_ble(propp, ble);
+
 	XNM::PropertyPoint::JSONObjProperty sensor_data(propp, "sensors");
 
 	Property<Xasin::NeoController::Color> current_ambient_color(propp, "current_ambient", 0);
@@ -17,6 +22,7 @@ namespace CON {
 
 void init() {
 	propp_mqtt.init();
+	propp_ble.init();
 
 	user_color.initialized = false;
 	sensor_data.initialized = false;
@@ -31,6 +37,10 @@ void init() {
 		if(user_color.initialized)
 			light_source.set_value(1);
 	};
+
+
+	ble.init();
+	ble.start_advertising();
 }
 
 }

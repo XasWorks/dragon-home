@@ -29,11 +29,6 @@ using namespace HW;
 #include <esp_log.h>
 #include <esp_http_client.h>
 
-#include <xnm/ble.h>
-
-XNM::BLE::Server test_host;
-XNM::BLE::BatService ble_battery(test_host);
-
 esp_err_t event_handler(void *context, system_event_t *event) {
     HW::mqtt.wifi_handler(event);
 	
@@ -138,23 +133,8 @@ void app_main(void)
 
     CON::init();
 
-    ble_battery.init();
-
-    test_host.init();
-    test_host.start_advertising();
-
     int i=0;
-    char buffer[255] = {};
-    while(true) {
-        vTaskDelay(1000/portTICK_PERIOD_MS);
-
-        snprintf(buffer, 254, "What about a really really long test message that is definitely more than 20 bytes? %d\n", i++);
     
-        test_host.DBG_send_str(buffer);
-
-        ble_battery.update_bat(100 - (i % 100));
-    }
-
     // Connection start detection. 
     // Allows for offline use if it can not connect to the broker
     TickType_t start_tick = xTaskGetTickCount();
