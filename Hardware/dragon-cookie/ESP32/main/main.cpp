@@ -29,6 +29,15 @@ using namespace HW;
 #include <esp_log.h>
 #include <esp_http_client.h>
 
+void print_memory_state() {
+    static int32_t last_memory = esp_get_free_heap_size();
+
+    int32_t mem_diff = last_memory - esp_get_free_heap_size();
+    last_memory = esp_get_free_heap_size();
+
+    ESP_LOGW("HEAP", "Heap now is at %d, %d change", last_memory, mem_diff);
+}
+
 esp_err_t event_handler(void *context, system_event_t *event) {
     HW::mqtt.wifi_handler(event);
 	
@@ -112,16 +121,14 @@ void app_main(void)
     }
     ESP_ERROR_CHECK(ret);
     
-    // tcpip_adapter_init();
-
     esp_event_loop_create_default();
     
     esp_event_loop_init(event_handler, nullptr);
-    
-    ESP_LOGI("HEAP", "Heap free is: %d", esp_get_free_heap_size());
 
     setenv("TZ", "GMT-2", 1);
     tzset();
+
+    mqtt.set_nvs_uri("mqtts://xaseiresh.hopto.org");
 
     XNM::NetHelpers::init_global_r3_ca();
     XNM::NetHelpers::set_mqtt(mqtt);
@@ -129,6 +136,7 @@ void app_main(void)
     XNM::NetHelpers::init();
 
     HW::init();
+
     HW::IND::init();
 
     CON::init();
@@ -172,6 +180,11 @@ void app_main(void)
         CON::sensor_data.set_num(HW::bme.get_gas_res(), "ambient_air_q");
 
         CON::sensor_data.update_done();
+
+        CON::system_data.set_num(esp_get_free_heap_size(), "heap");
+        CON::system_data.set_num(heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT), "heap_block");
+        
+        CON::system_data.update_done();
 
         cJSON_SetNumberValue(motion_sensor, HW::is_motion_triggered() ? 1 : 0);
 

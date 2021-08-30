@@ -23,6 +23,8 @@
 #include <esp_agc.h>
 #include <esp_ns.h>
 
+void  print_memory_state();
+
 namespace HW {
 	Xasin::I2C::LT303ALS lt303als;
 	float smoothed_lt_meas;
@@ -41,12 +43,8 @@ namespace HW {
 	bool transmit_audio     = false;
 	int audio_silence_ticks = 0;
 
-	void *agc_handle = nullptr;
-	ns_handle_t ns_handle  = nullptr;
-
-	static const esp_wn_iface_t *wakenet = &WAKENET_MODEL;
-	static const model_coeff_getter_t *model_coeff_getter = &WAKENET_COEFF;
-	model_iface_data_t *wakenet_model = nullptr;
+	// void *agc_handle = nullptr;
+	// ns_handle_t ns_handle  = nullptr;
 
 	int whistle_detect_ticks = 0;
 	int whistle_detect_fail_ticks = 0;
@@ -106,17 +104,11 @@ namespace HW {
 				Xasin::Audio::rx_buffer_t b2;
 				Xasin::Audio::rx_buffer_t bfr = {};
 
-				ns_process(ns_handle, b1.data(), b2.data());
-				for(int i=0; i<3; i++) {
-					int ptr_shift = i*160;
-					esp_agc_process(agc_handle, b2.data() + ptr_shift, bfr.data() + ptr_shift, 160, 16000);
-				}
-
-				int r = wakenet->detect(wakenet_model, bfr.data());
-				if(r > 0) {
-					mqtt.publish_int("whistle_detect", 1);
-					ESP_LOGI("Atest", "Got return of %d!", r);
-				}
+				// ns_process(ns_handle, b1.data(), b2.data());
+				// for(int i=0; i<3; i++) {
+				// 	int ptr_shift = i*160;
+				// 	esp_agc_process(agc_handle, b2.data() + ptr_shift, bfr.data() + ptr_shift, 160, 16000);
+				// }
 
 				if(transmit_audio)
 					mqtt.publish_to("audio/record", bfr.data(), bfr.size() * 2);
@@ -229,7 +221,7 @@ namespace HW {
 		bme.init_quickstart();
 
 		TaskHandle_t processing_handle;
-		xTaskCreatePinnedToCore(audio_processing_loop, "Audio", 32768, nullptr, 10, &processing_handle, 1);
+		xTaskCreatePinnedToCore(audio_processing_loop, "Audio", 30000, nullptr, 10, &processing_handle, 1);
 
 		i2s_pin_config_t speaker_tx_cfg = HW_PINS_AUDIO_TX;
 		speaker.init(processing_handle, speaker_tx_cfg);
@@ -241,7 +233,9 @@ namespace HW {
 
 		gpio_set_level(HW_PIN_MIC_PWR, true);
 
-	    mqtt.start_from_nvs();
+	   print_memory_state();
+
+	   mqtt.start_from_nvs();
 
 		mqtt.subscribe_to("audio/play", [](Xasin::MQTT::MQTT_Packet data) {
 			const int payload_len = data.data.size()-1;
@@ -261,11 +255,9 @@ namespace HW {
 
 		audio_tx_stream.start(false);
 
-		agc_handle = esp_agc_open(3, 16000);
-		set_agc_config(agc_handle, 40, 1, -6);
-		ns_handle  = ns_create(30);
-
-		wakenet_model = wakenet->create(model_coeff_getter, DET_MODE_90);
+		// agc_handle = esp_agc_open(3, 16000);
+		// set_agc_config(agc_handle, 40, 1, -6);
+		// ns_handle  = ns_create(30);
 
 		microphone.start();
 

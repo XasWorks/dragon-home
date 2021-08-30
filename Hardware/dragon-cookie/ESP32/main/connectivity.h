@@ -36,5 +36,7 @@ namespace CON {
 
 	extern XNM::PropertyPoint::JSONObjProperty sensor_data;
 
+	extern XNM::PropertyPoint::JSONObjProperty system_data;
+
 	void init();
 }

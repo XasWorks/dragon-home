@@ -20,6 +20,8 @@ namespace CON {
 	Property<int> light_mode(propp, "light_mode", -1);
 	Property<int> light_source(propp, "light_source", 0);
 
+	XNM::PropertyPoint::JSONObjProperty system_data(propp, "_system");
+
 void init() {
 	propp_mqtt.init();
 	propp_ble.init();
@@ -38,6 +40,13 @@ void init() {
 			light_source.set_value(1);
 	};
 
+	user_color.init();
+	sensor_data.init();
+	light_mode.init();
+	light_source.init();
+	current_ambient_color.init();
+
+	system_data.init();
 
 	ble.init();
 	ble.start_advertising();
