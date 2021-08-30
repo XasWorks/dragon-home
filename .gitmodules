@@ -1,6 +1,7 @@
 [submodule "XasCode"]
 	path = XasCode
 	url = git@github.com:XasWorks/XasCode.git
+	branch = master
 [submodule "Hardware/dragon-cookie/ESP32/components/esp-sr"]
 	path = Hardware/dragon-cookie/ESP32/components/esp-sr
 	url = https://github.com/espressif/esp-sr.git
