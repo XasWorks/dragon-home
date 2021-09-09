@@ -4,13 +4,13 @@
 
 #include "connectivity.h"
 
-namespace CON {
-	XNM::BLE::Server ble;
+#include <xnm/net_helpers.h>
 
+namespace CON {
 	XNM::PropertyPoint::Handler propp;
 
 	XNM::PropertyPoint::MQTTOutput propp_mqtt(propp, HW::mqtt);
-	XNM::PropertyPoint::BLEOutput  propp_ble(propp, ble);
+	XNM::PropertyPoint::BLEOutput  propp_ble(propp, XNM::NetHelpers::ble);
 
 	XNM::PropertyPoint::JSONObjProperty sensor_data(propp, "sensors");
 
@@ -47,9 +47,6 @@ void init() {
 	current_ambient_color.init();
 
 	system_data.init();
-
-	ble.init();
-	ble.start_advertising();
 }
 
 }

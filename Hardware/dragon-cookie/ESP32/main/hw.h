@@ -15,7 +15,7 @@ namespace HW {
 	extern Xasin::I2C::BME680   bme;
 
 	extern Xasin::NeoController::NeoController leds;
-	extern Xasin::MQTT::Handler mqtt;
+	extern Xasin::MQTT::Handler & mqtt;
 
 	extern Xasin::Audio::TX speaker;
 	extern Xasin::Audio::RX microphone;

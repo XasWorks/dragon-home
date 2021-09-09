@@ -31,7 +31,7 @@ namespace HW {
 	
 	Xasin::I2C::BME680   bme(0b1110111);
 
-	Xasin::MQTT::Handler mqtt;
+	Xasin::MQTT::Handler & mqtt = XNM::NetHelpers::mqtt; 
 
 	Xasin::NeoController::NeoController leds(GPIO_NUM_23, RMT_CHANNEL_0, 7);
 	Xasin::Audio::TX speaker;
@@ -234,8 +234,6 @@ namespace HW {
 		gpio_set_level(HW_PIN_MIC_PWR, true);
 
 	   print_memory_state();
-
-	   mqtt.start_from_nvs();
 
 		mqtt.subscribe_to("audio/play", [](Xasin::MQTT::MQTT_Packet data) {
 			const int payload_len = data.data.size()-1;

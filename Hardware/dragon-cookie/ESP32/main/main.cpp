@@ -41,6 +41,8 @@ void print_memory_state() {
 esp_err_t event_handler(void *context, system_event_t *event) {
     HW::mqtt.wifi_handler(event);
 	
+    XNM::NetHelpers::event_handler(event);
+
     // Xasin::MQTT::Handler::try_wifi_reconnect(event);
 
 	return ESP_OK;
@@ -125,13 +127,12 @@ void app_main(void)
     
     esp_event_loop_init(event_handler, nullptr);
 
+    XNM::NetHelpers::WIFI::set_nvs("Tplpfrlp", "Nothing!");
+
     setenv("TZ", "GMT-2", 1);
     tzset();
 
-    mqtt.set_nvs_uri("mqtts://xaseiresh.hopto.org");
-
     XNM::NetHelpers::init_global_r3_ca();
-    XNM::NetHelpers::set_mqtt(mqtt);
 
     XNM::NetHelpers::init();
 
@@ -142,22 +143,6 @@ void app_main(void)
     CON::init();
 
     int i=0;
-    
-    // Connection start detection. 
-    // Allows for offline use if it can not connect to the broker
-    TickType_t start_tick = xTaskGetTickCount();
-    while(true) {
-        vTaskDelay(200/portTICK_PERIOD_MS);
-
-        auto ota_state = XNM::NetHelpers::OTA::get_state();
-        if(ota_state == XNM::NetHelpers::OTA::DOWNLOADING)
-            continue;
-
-        if(ota_state == XNM::NetHelpers::OTA::UP_TO_DATE)
-            break;
-        if(xTaskGetTickCount() - start_tick > (20000/portTICK_PERIOD_MS))
-            break;
-    }
 
     XNM::NetHelpers::report_boot_reason();
 
