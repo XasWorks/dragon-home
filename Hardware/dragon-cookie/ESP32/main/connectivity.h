@@ -14,11 +14,6 @@
 
 
 namespace CON {
-	// extern XNM::BLE::Server ble;
-
-	extern XNM::PropertyPoint::Handler propp;
-	extern XNM::PropertyPoint::MQTTOutput propp_output;
-
 	template<class T>
 	using Property = XNM::PropertyPoint::SingleProperty<T>;
 

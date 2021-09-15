@@ -233,8 +233,6 @@ namespace HW {
 
 		gpio_set_level(HW_PIN_MIC_PWR, true);
 
-	   print_memory_state();
-
 		mqtt.subscribe_to("audio/play", [](Xasin::MQTT::MQTT_Packet data) {
 			const int payload_len = data.data.size()-1;
 			const uint8_t packet_count = *reinterpret_cast<const uint8_t*>(data.data.data());

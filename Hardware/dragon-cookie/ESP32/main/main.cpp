@@ -38,9 +38,7 @@ void print_memory_state() {
     ESP_LOGW("HEAP", "Heap now is at %d, %d change", last_memory, mem_diff);
 }
 
-esp_err_t event_handler(void *context, system_event_t *event) {
-    HW::mqtt.wifi_handler(event);
-	
+esp_err_t event_handler(void *context, system_event_t *event) {	
     XNM::NetHelpers::event_handler(event);
 
     // Xasin::MQTT::Handler::try_wifi_reconnect(event);
@@ -86,9 +84,6 @@ void test_lights(void *arg) {
             buffer.merge_overlay(Material::BLUE, 120);
 
             HW::set_rgbww(buffer);
-
-            if(XNM::NetHelpers::OTA::get_state() == XNM::NetHelpers::OTA::REBOOT_NEEDED)
-                esp_restart();
         }
 
         if(HW::is_motion_triggered()) {
@@ -127,16 +122,17 @@ void app_main(void)
     
     esp_event_loop_init(event_handler, nullptr);
 
-    XNM::NetHelpers::WIFI::set_nvs("Tplpfrlp", "Nothing!");
-
     setenv("TZ", "GMT-2", 1);
     tzset();
+
+    XNM::NetHelpers::WIFI::set_nvs("TP-LINK_84CDC2", "f36eebda48");
 
     XNM::NetHelpers::init_global_r3_ca();
 
     XNM::NetHelpers::init();
 
     HW::init();
+    ESP_LOGI("XNM", "Hardware init finished!");
 
     HW::IND::init();
 

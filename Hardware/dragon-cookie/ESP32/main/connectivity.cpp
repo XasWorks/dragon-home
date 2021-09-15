@@ -7,10 +7,7 @@
 #include <xnm/net_helpers.h>
 
 namespace CON {
-	XNM::PropertyPoint::Handler propp;
-
-	XNM::PropertyPoint::MQTTOutput propp_mqtt(propp, HW::mqtt);
-	XNM::PropertyPoint::BLEOutput  propp_ble(propp, XNM::NetHelpers::ble);
+	XNM::PropertyPoint::Handler & propp = XNM::NetHelpers::propp;
 
 	XNM::PropertyPoint::JSONObjProperty sensor_data(propp, "sensors");
 
@@ -20,12 +17,9 @@ namespace CON {
 	Property<int> light_mode(propp, "light_mode", -1);
 	Property<int> light_source(propp, "light_source", 0);
 
-	XNM::PropertyPoint::JSONObjProperty system_data(propp, "_system");
+	XNM::PropertyPoint::JSONObjProperty system_data(propp, "old_system");
 
 void init() {
-	propp_mqtt.init();
-	propp_ble.init();
-
 	user_color.initialized = false;
 	sensor_data.initialized = false;
 
