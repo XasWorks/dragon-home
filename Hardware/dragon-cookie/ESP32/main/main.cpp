@@ -73,19 +73,6 @@ void test_lights(void *arg) {
         vTaskDelay(6);
         HW::fx_tick();
 
-        while(XNM::NetHelpers::OTA::get_state() == XNM::NetHelpers::OTA::DOWNLOADING) {
-            vTaskDelayUntil(&tick, 150);
-
-            for(int i=0; i<6; i++)
-                leds.colors[i].merge_overlay(i == ((xTaskGetTickCount() / 150) % 6) ? Material::BLUE : 0, 120);
-            
-            leds.update();
-            auto buffer = HW::ambient_recommendation;
-            buffer.merge_overlay(Material::BLUE, 120);
-
-            HW::set_rgbww(buffer);
-        }
-
         if(HW::is_motion_triggered()) {
             last_pir_tick = xTaskGetTickCount();
         }
@@ -119,30 +106,27 @@ void app_main(void)
     ESP_ERROR_CHECK(ret);
     
     esp_event_loop_create_default();
-    
     esp_event_loop_init(event_handler, nullptr);
+
+    XNM::NetHelpers::report_boot_reason();
 
     setenv("TZ", "GMT-2", 1);
     tzset();
 
-    XNM::NetHelpers::WIFI::set_nvs("TP-LINK_84CDC2", "f36eebda48");
-
-    XNM::NetHelpers::init_global_r3_ca();
-
-    XNM::NetHelpers::init();
-
-    HW::init();
-    ESP_LOGI("XNM", "Hardware init finished!");
-
+    CON::init();
+    HW::early_init();
     HW::IND::init();
 
-    CON::init();
+    xTaskCreatePinnedToCore(test_lights, "Lights", 4096, nullptr, configMAX_PRIORITIES - 2, nullptr, 1);
+
+    XNM::NetHelpers::init_global_r3_ca();
+    XNM::NetHelpers::init();
+
+    HW::late_init();
 
     int i=0;
 
     XNM::NetHelpers::report_boot_reason();
-
-    xTaskCreatePinnedToCore(test_lights, "Lights", 4096, nullptr, configMAX_PRIORITIES - 2, nullptr, 1);
 
     cJSON * sensor_data = cJSON_CreateObject();
     auto motion_sensor = cJSON_AddNumberToObject(sensor_data, "pir_motion", 0);

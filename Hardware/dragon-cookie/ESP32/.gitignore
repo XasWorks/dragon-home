@@ -1,2 +1,5 @@
 build/
 sdkconfig.old
+.rake_tasks~
+./branch_config/active
+./branch_config/.active

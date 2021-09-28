@@ -29,7 +29,9 @@ namespace HW {
 	void set_rgbww(Xasin::NeoController::Color color);
 
 	void fx_tick();
-	void init();
+	void early_init();
+
+	void late_init();
 
 	bool is_motion_triggered();
 }

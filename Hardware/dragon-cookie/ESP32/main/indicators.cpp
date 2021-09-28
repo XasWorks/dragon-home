@@ -5,6 +5,8 @@
 
 #include <cJSON.h>
 
+#include <xnm/net_helpers.h>
+
 namespace HW {
 namespace IND {
 
@@ -59,6 +61,11 @@ void tick() {
     if(HW::transmit_audio) {
         local_notification_color = Material::PURPLE;
         local_state = WORKING;
+    }
+
+    if(XNM::NetHelpers::OTA::get_state() == XNM::NetHelpers::OTA::DOWNLOADING) {
+        local_state = WARN_DISCO;
+        local_notification_color = Material::BLUE;
     }
 
     uint32_t indicator_ticks = xTaskGetTickCount() - notification_start;

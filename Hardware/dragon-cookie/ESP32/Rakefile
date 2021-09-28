@@ -1,0 +1,83 @@
+require 'json'
+
+IDF_EXPORT_CMD = 'source /opt/ESP/esp-idf-v4.1/export.sh'
+
+BRANCH = ENV['BUILD_BRANCH'] || 'main'
+BUILD_CONFIG = ENV['BUILD_CONFIG'] || BRANCH
+
+def current_version()
+	t = Time.now();
+	
+	out_v = t.year - 2000;
+	out_v <<= 4;
+	
+	out_v += t.month
+	out_v <<= 13
+	
+	minor_version = 0;
+	if(File.exists? './branch_configs/active/.version')
+		old_version = JSON.parse(File.read('./branch_configs/active/.version'))
+
+		if(old_version['year'] == t.year && old_version['month'] == t.month)
+			minor_version = old_version['minor'] + 1;
+		end
+	end
+
+	File.write('./branch_configs/active/.version', {year: t.year, month: t.month, minor: minor_version}.to_json);
+
+	out_v += minor_version;
+	out_v <<= 8;
+	
+	if(BUILD_CONFIG == 'main')
+		out_v += 1;
+	end
+
+	out_v
+end
+	
+BUILD_VERS = ENV['BUILD_VERSION'] || (BRANCH == 'main' ? current_version() : nil)
+
+task :switch do
+	Dir.chdir "./branch_configs/" do
+		break if File.exists?('./.active') && File.read('./.active') == BUILD_CONFIG
+		
+		raise "Branch configuration does not exist!" unless Dir.exists?("./#{BUILD_CONFIG}");
+
+		File.delete './active' if File.exists? './active'
+		File.symlink "./#{BUILD_CONFIG}", './active'
+
+		Dir.glob('./active/**') { |file| FileUtils.touch file }
+
+		File.write('./.active', BUILD_CONFIG)
+	end
+end
+
+task :build => :switch do
+	if(ENV['IDF_TOOLS_EXPORT_CMD'].nil?)
+		sh IDF_EXPORT_CMD
+	end
+
+	sh 'idf.py build'
+end
+
+task :push => [ :build ] do
+	raise "Build version required!" if(BUILD_VERS.nil?)
+
+	sh "scp build/dragon-cookie.bin root@xaseiresh.hopto.org:/var/esp_ota/dragon-cookie/#{BRANCH}.bin"
+
+	sh "ssh root@xaseiresh.hopto.org \"echo #{BUILD_VERS} > /var/esp_ota/dragon-cookie/main.vers\""
+	sh "mosquitto_pub -h xaseiresh.hopto.org -t /esp32/dragon-cookie/ota/#{BRANCH} -m #{BUILD_VERS}"
+end
+
+task :logs do
+	sh 'mosquitto_sub -h xaseiresh.hopto.org -v -N -t "/esp32/dragon-cookie/+/logs"'
+end
+
+task :flash => :build do
+	sh 'idf.py flash'
+end
+task :monitor do
+	sh 'idf.py monitor'
+end
+
+task :default => [ :flash, :monitor ]

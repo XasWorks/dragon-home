@@ -214,12 +214,14 @@ namespace HW {
 		smoothed_lt_meas = 0.992 * smoothed_lt_meas + 0.008 * HW::lt303als.get_brightness().als_ch1;
 	}
 
-	void init() {
+	void early_init() {
 		init_gpios();
 
 		lt303als.init();
 		bme.init_quickstart();
+	}
 
+	void late_init() {
 		TaskHandle_t processing_handle;
 		xTaskCreatePinnedToCore(audio_processing_loop, "Audio", 30000, nullptr, 10, &processing_handle, 1);
 
@@ -256,8 +258,6 @@ namespace HW {
 		// ns_handle  = ns_create(30);
 
 		microphone.start();
-
-		vTaskDelay(100);
 	}
 
 	bool is_motion_triggered() {
