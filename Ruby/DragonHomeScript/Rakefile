@@ -1,0 +1,16 @@
+require 'standalone_migrations'
+StandaloneMigrations::Tasks.load_tasks
+
+task :start do
+	load 'start_server.rb'
+end
+
+task :push do
+	Dir.chdir('../') do
+		sh "rsync -r ./ root@xaseiresh.hopto.org:/root/TestDragonHome/"
+	end
+end
+
+task :reload => :push do
+	sh 'mosquitto_pub -h xaseiresh.hopto.org -t /dragon-home/reload -m Y'
+end
