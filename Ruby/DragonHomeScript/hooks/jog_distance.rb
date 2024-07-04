@@ -1,17 +1,17 @@
 
-
 $core.define_hook :jogging do
 	on :userLocationChanged do |user, distance|
 		next if user.hook_data[:active_jogging].nil?
-
 		data = user.hook_data[:active_jogging]
 
 		seg_time = Time.now() - data[:last_update]
 		data[:last_update] = Time.now();
 
-		segment_speed = (distance/1000) / (seg_time/60);
+		segment_speed = (distance/1000) / (seg_time/(60*60));
 
-		threshold_speed = data[:type] == :jog ? 6 : 2;
+		puts "You went #{distance}m in #{seg_time} seconds"
+
+		threshold_speed = (data[:type] == :jog) ? 6 : 2;
 
 		data[:temporary_time] += seg_time;
 		data[:temporary_distance] += distance;
@@ -21,9 +21,9 @@ $core.define_hook :jogging do
 		end
 
 		if(segment_speed > threshold_speed)
-			temporary_speed = (data[:temporary_distance]/1000) / (data[:temporary_time]/60);
+			temporary_speed = (data[:temporary_distance]/1000) / (data[:temporary_time]/(60*60));
 			
-			if(data[:temporary_time] < 1 || temporary_speed > threshold_speed)
+			if((data[:temporary_time] < 1) || temporary_speed > threshold_speed)
 				data[:distance]    += data[:temporary_distance]
 				data[:active_time] += data[:temporary_time]
 			else
@@ -62,7 +62,14 @@ $core.define_hook :jogging do
 			user.send_message out_str;
 		end
 
+		user.close_activity('jogging', extra_details: {
+			distance: data[:distance],
+			time: data[:active_time],
+			paused: data[:idle_time]
+		});
+
 		user.hook_data[:active_jogging] = nil;
+		user.save
 	end
 
 	on :userMovedRooms do |user, old_room|
@@ -100,6 +107,10 @@ $core.define_hook :jogging do
 
 				type: $1 == 'jogging' ? :jog : :walk
 			}
+			user.save
+
+			user.start_activity('jogging', color: 'green', category: 'sports');
+
 		when /(?:i am|i'm) (?:done|back) (jogging|(?:with|from) the (?:walk|jog))/i
 			end_walk(user, "Very nice! ", convo: convo)
 		end

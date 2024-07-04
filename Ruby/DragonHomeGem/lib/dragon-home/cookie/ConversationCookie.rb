@@ -60,6 +60,8 @@ module XNM
                             jsgf = c_convo.inquiry_options[:jsgf];
                             parsed_text = `pocketsphinx_continuous -infile #{record_file} -logfn /dev/null #{(!jsgf.nil?) ? '-jsgf ' + jsgf : ''}`
 
+                            puts "Found text was: #{parsed_text}"
+
                             c_convo.set_user_answer(parsed_text)
 
                             @conversation_callback&.call(c_convo)

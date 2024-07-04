@@ -107,6 +107,16 @@ module XNM
                 @sensor_update_proc&.call(data)
             end
 
+            def set(tag, data)
+                unless(data.is_a? Hash)
+                    data = {value: data}
+                end
+                
+                data = data.to_json
+
+                @mqtt.publish_to @base_topic + "set/#{tag}", data
+            end
+
             def on_sensor_update(&block)
                 @sensor_update_proc = block;
             end

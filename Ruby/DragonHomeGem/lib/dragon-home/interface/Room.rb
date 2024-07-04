@@ -14,7 +14,7 @@ module XNM
 
             attr_reader :indicator_brightness
 
-            attr_reader :room_colour
+            attr_accessor :lights
 
             attr_reader :id
 
@@ -27,6 +27,8 @@ module XNM
 
                 @users = []
                 @room_accessories = []
+
+                @lights = false
             end
 
             private def update_accessories(tag, *args)

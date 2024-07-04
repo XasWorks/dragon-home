@@ -22,6 +22,20 @@ $core.define_hook :bs_room do |h|
     end
     on :userAwakeChanged do |user|
         user.send_message(user.awake?() ? "Good morning, #{user.name}" : "Good night, #{user.name}")
+
+        if(user.awake?)
+            user.close_activity('sleep')
+        else
+            user.start_activity('sleep', category: 'sleep', color: 'blue');
+        end
+
+        if(!user.room.nil?)
+            if(user.awake?)
+                user.room.wakeup_lights
+            else
+                user.room.lights = false
+            end
+        end
     end
     on :userSwitched do |user|
         next unless user.awake?
@@ -61,6 +75,28 @@ $core.define_hook :bs_room do |h|
             $mqtt.publish_to "/esp32/WuffGate/3C.71.BF.0A.88.80/SetTarget", $1 == "stop" ? 0 : 7, retain: true
 
             c.reply "#{$1}ing dialing sequence!"
+        end
+    end
+
+
+    on :conversationReply do |c|
+        if(c.to_s =~ /say hello please/)
+            c.reply "Of course. Hello, I am the dragon's home!"
+        end
+    end
+
+    on :conversationReply do |c|
+        if(c.to_s =~ /(enable|disable) ambient lights/i)
+            r = c.user&.room 
+
+            if r.nil?
+                c.reply "Sorry, couldn't find a room for you!"
+                next;
+            end
+
+            r.lights = ($1 == 'enable' ? :auto : :off)
+            
+            c.reply "Ok, #{$1 == 'enable' ? 'enabling' : 'disabling'} ambient lights!"
         end
     end
 end

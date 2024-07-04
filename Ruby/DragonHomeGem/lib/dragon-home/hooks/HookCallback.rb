@@ -27,7 +27,7 @@ module XNM
                 t_start = Time.now();
 
                 begin
-                    Timeout.timeout(3) {
+                    Timeout.timeout(30) {
                         @block.call(*args)
                     }
                 #rescue

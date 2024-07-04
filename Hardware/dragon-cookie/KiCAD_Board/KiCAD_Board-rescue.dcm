@@ -1,3 +1,19 @@
 EESchema-DOCLIB  Version 2.0
 #
+$CMP CMM-4030-XasParts
+F https://www.digikey.de/product-detail/de/cui-devices/CMM-4030D-261-I2S-TR/2223-CMM-4030D-261-I2S-CT-ND/13404679
+$ENDCMP
+#
+$CMP ESP32-WROOM-32-dk_RF-Transceiver-Modules
+F https://www.espressif.com/sites/default/files/documentation/esp32-wroom-32_datasheet_en.pdf
+$ENDCMP
+#
+$CMP ROF-78E3.3-0.5SMD-R-XasParts
+F https://recom-power.com/pdf/Innoline/ROF-78E-0.5.pdf
+$ENDCMP
+#
+$CMP TSSP58038-dk_Optical-Sensors-Photo-Detectors-Remote-Receiver
+F http://www.vishay.com/docs/82479/tssp58038.pdf
+$ENDCMP
+#
 #End Doc Library

@@ -42,6 +42,18 @@ module XNM
                 end
             end
 
+            def wakeup_lights()
+                cookie.set("lights", {wakeup: true, brightness: true, user_color: false});
+            end
+
+            def lights=(state)
+                if(state == :auto)
+                    cookie.set("lights", {brightness: true, user_color: false});
+                elsif(!state || state == :off)
+                    cookie.set("lights", {brightness: false})
+                end
+            end
+
             def queue_conversation(convo)
                 @cookie.queue_conversation convo
             end

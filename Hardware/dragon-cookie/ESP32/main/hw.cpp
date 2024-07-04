@@ -111,7 +111,7 @@ namespace HW {
 				// }
 
 				if(transmit_audio)
-					mqtt.publish_to("audio/record", bfr.data(), bfr.size() * 2);
+					mqtt.publish_to("audio/record", b1.data(), b1.size() * 2);
 
 				if(audio_silence_ticks < 50) {
 					if((microphone.get_volume_estimate() > -18))

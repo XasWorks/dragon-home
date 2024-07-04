@@ -8,10 +8,20 @@ require 'xnm/telegram/Handler.rb'
 
 require 'dragon-home'
 
+require 'json/add/time'
+
+require 'active_record'
+
+ActiveRecord::Base.establish_connection(YAML::load(File.read('db/config.yml'))["production"]);
+
 $config = YAML.load(File.read('config.yaml'));
 
 $mqtt = MQTT::SubHandler.new($config['mqtt']);
 $telegram = XNM::Telegram::Handler.new($config['telegram']);
+
+$mqtt.subscribe_to '/dragon-home/reload' do
+    exec('ruby start_server.rb 2>&1 | tee /var/log/dragonhome.log');
+end
 
 $telegram.on_command 'start' do |msg|
     msg.send_message "Hi! Your chat id is: #{msg.user.chat_id}. Please pass this on to your local dragon technitian!"
@@ -32,6 +42,8 @@ $config['rooms'].each do |room_id, data|
             convo = XNM::Conversation::BaseConversation.new()
             convo.inquire(nil, jsgf: 'voice.jsgf') { |c| $home_core.send_conversation(c) }
             
+            convo.user = $core.users['xaseiresh'];
+
             cookie.whistle_detected = true
             cookie.send_message(convo);
         end
@@ -62,7 +74,6 @@ $config['users'].each do |user_id, data|
         puts "TG User for #{user_id} is #{tg_user}"
 
         tg_convo = XNM::Conversation::TelegramConversationEndpoint.new(tg_user, $core, user);
-
         user.conversation_outputs << tg_convo
     end
     if(data.include? 'owntracks')
@@ -82,7 +93,7 @@ $core.users['xaseiresh'].send_message('Script restarted');
 at_exit {
     $core.users['xaseiresh'].send_message('DragonHome script exiting!');
 
-    sleep 10
+    sleep 3
 }
 
 sleep 3
@@ -93,3 +104,4 @@ load 'hooks/bs_room_hook.rb'
 load 'hooks/tea_hook.rb'
 load 'hooks/comfy_messages.rb'
 load 'hooks/jog_distance.rb'
+load 'hooks/job_hook.rb'

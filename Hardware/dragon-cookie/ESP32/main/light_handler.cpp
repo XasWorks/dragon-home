@@ -18,7 +18,16 @@ namespace HW {
     Color ambient_smoothing = 0;
     Color ambient_recommendation = 0;
 
+    Color user_color = 0xFF000000;
+    float ambient_brightness = -1;
+
     uint8_t ambient_fade_speed = 5;
+
+    TickType_t wakeup_light_start = 0;
+
+    void set_wakeup_lights(bool state) {
+        wakeup_light_start = state ? xTaskGetTickCount() : 0;
+    }
 
     struct lightprofile_t {
         float t;
@@ -65,7 +74,7 @@ namespace HW {
     }
 
     uint8_t get_current_light_bmod() {
-        int brightness = std::max<int>(-1, std::min<int>(255, CON::light_mode.get_value()));
+        int brightness = std::max<int>(-1, std::min<int>(255, 255*ambient_brightness));
 
         if(brightness == -1) {
             brightness = std::max(0, std::min<int>(255, 255 - (255 * (HW::smoothed_lt_meas - 1500)) / 6000));
@@ -87,19 +96,27 @@ namespace HW {
         float daytime = timeinfo.tm_sec / 3600.0F + timeinfo.tm_min / 60.0F + timeinfo.tm_hour;
         Color ambient_color = interpolate_color(daytime, daytime_profile);
 
+
+        if(wakeup_light_start != 0) {
+            float wakeup_time = ((xTaskGetTickCount() - wakeup_light_start)) / (60000.0F / portTICK_PERIOD_MS);
+        
+            if(wakeup_time < 10) {
+                auto wake_color = Color::Temperature(std::min<float>(7000, 300+640*wakeup_time));
+
+                ambient_color.merge_overlay(wake_color, 
+                    std::max<int>(0, std::min<int>(255, 510 - 51.0F*wakeup_time)));
+            }
+        }
+
         return ambient_color;
     }
 
     Color get_current_ambient_rec() {
         Color ambient_color;
         
-        int light_source = CON::light_source.get_value();
-        if(light_source == 0)
-            ambient_color = get_current_daytime_rec();
-        else if(light_source == 1)
-            ambient_color = CON::user_color.get_value();
-        else
-            ambient_color = Color::Temperature(light_source);
+ 
+        ambient_color = get_current_daytime_rec();
+        ambient_color.merge_overlay(user_color);
 
         ambient_color.bMod(get_current_light_bmod());
 

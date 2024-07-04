@@ -79,6 +79,7 @@ void test_lights(void *arg) {
         HW::room_occupied = (xTaskGetTickCount() - last_pir_tick) < (10*60*1000 / portTICK_PERIOD_MS);
         if(HW::room_occupied != last_occupation)
             mqtt.publish_to("sensors/occupancy", HW::room_occupied ? "1" : "0", 1, true, 1);
+
         last_occupation = HW::room_occupied;
 
         HW::IND::tick();
@@ -122,6 +123,7 @@ void app_main(void)
     XNM::NetHelpers::init_global_r3_ca();
     XNM::NetHelpers::init();
 
+    // Late init takes care of the audio subsystem, as it needs a decent chunk of RAM that is needed for OTA
     HW::late_init();
 
     int i=0;
@@ -145,11 +147,6 @@ void app_main(void)
         CON::sensor_data.set_num(HW::bme.get_gas_res(), "ambient_air_q");
 
         CON::sensor_data.update_done();
-
-        CON::system_data.set_num(esp_get_free_heap_size(), "heap");
-        CON::system_data.set_num(heap_caps_get_largest_free_block(MALLOC_CAP_DEFAULT), "heap_block");
-        
-        CON::system_data.update_done();
 
         cJSON_SetNumberValue(motion_sensor, HW::is_motion_triggered() ? 1 : 0);
 

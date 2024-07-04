@@ -31,7 +31,8 @@ $core.define_hook :comfy do
 				user.send_message @messages.sample
 			end
 			
-			user.hook_data[:next_comfy_message] = Time.now() + rand(60..120) * 60;
+			user.hook_data[:next_comfy_message] = Time.now() + rand(60..180) * 60;
+			user.save
 		end
 	end
 end
